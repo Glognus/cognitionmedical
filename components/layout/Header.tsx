@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
+import { Logo } from "@/components/ui/Logo";
 
 export function Header() {
 	const t = useTranslations("Navigation");
@@ -64,45 +65,13 @@ export function Header() {
 						{/* Logo */}
 						<Link
 							href={`/${locale}`}
-							className="group relative flex items-center gap-3"
+							className="group relative"
 							aria-label="Cognition Medical Home"
 						>
-							{/* Logo Mark */}
 							<div className="relative">
 								{/* Glow effect */}
 								<div className="absolute -inset-2 rounded-xl bg-primary/20 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
-								{/* Logo container */}
-								<div className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-bg-card transition-all duration-300 group-hover:border-primary/40 group-hover:bg-bg-elevated">
-									<svg
-										viewBox="0 0 24 24"
-										className="h-5 w-5"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-										aria-hidden="true"
-									>
-										{/* Neural network visualization */}
-										<circle cx="12" cy="4" r="2" className="fill-primary" />
-										<circle cx="6" cy="12" r="1.5" className="fill-secondary" />
-										<circle cx="18" cy="12" r="1.5" className="fill-secondary" />
-										<circle cx="12" cy="20" r="2" className="fill-accent" />
-										<circle cx="12" cy="12" r="2.5" className="fill-primary/80" />
-										<path
-											d="M12 6.5v3M12 14.5v3M8 11l1.5 1M14.5 12l1.5-1M8 13l1.5-1M14.5 12l1.5 1"
-											className="stroke-text-subtle"
-											strokeWidth="1"
-											strokeLinecap="round"
-										/>
-									</svg>
-								</div>
-							</div>
-							{/* Logo Text */}
-							<div className="flex flex-col">
-								<span className="font-display text-lg font-bold tracking-tight text-text">
-									Cognition
-								</span>
-								<span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-primary">
-									Medical
-								</span>
+								<Logo size="md" />
 							</div>
 						</Link>
 

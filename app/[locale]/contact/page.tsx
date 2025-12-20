@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContactForm } from "@/components/contact/ContactForm";
+import { LogoIcon } from "@/components/ui/Logo";
 
 type Props = {
 	params: Promise<{ locale: string }>;
@@ -158,27 +159,7 @@ export default async function ContactPage({ params }: Props) {
 								<div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
 
 								<div className="relative flex items-center gap-3">
-									<div className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-bg-elevated">
-										<svg
-											viewBox="0 0 24 24"
-											className="h-5 w-5"
-											fill="none"
-											xmlns="http://www.w3.org/2000/svg"
-											aria-hidden="true"
-										>
-											<circle cx="12" cy="4" r="2" className="fill-primary" />
-											<circle cx="6" cy="12" r="1.5" className="fill-secondary" />
-											<circle cx="18" cy="12" r="1.5" className="fill-secondary" />
-											<circle cx="12" cy="20" r="2" className="fill-accent" />
-											<circle cx="12" cy="12" r="2.5" className="fill-primary/80" />
-											<path
-												d="M12 6.5v3M12 14.5v3M8 11l1.5 1M14.5 12l1.5-1M8 13l1.5-1M14.5 12l1.5 1"
-												className="stroke-text-subtle"
-												strokeWidth="1"
-												strokeLinecap="round"
-											/>
-										</svg>
-									</div>
+									<LogoIcon className="h-11 w-11" />
 									<div>
 										<span className="font-display text-lg font-bold text-text">Cognition</span>
 										<span className="ml-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-primary">
