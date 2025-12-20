@@ -1,0 +1,323 @@
+{
+	"Navigation": {
+		"home": "Home",
+		"technology": "Technology",
+		"about": "About",
+		"team": "Team",
+		"contact": "Contact",
+		"getInTouch": "Get in Touch"
+	},
+	"Footer": {
+		"description": "Cognition Medical develops cutting-edge interventional medical devices committed to advancing and improving healthcare in neurovascular treatment.",
+		"companyTitle": "Company",
+		"contactTitle": "Contact",
+		"about": "About Us",
+		"team": "Our Team",
+		"technology": "Technology",
+		"rights": "All rights reserved.",
+		"privacy": "Privacy Policy",
+		"terms": "Terms of Service"
+	},
+	"Home": {
+		"hero": {
+			"tagline": "Neurovascular Innovation",
+			"title": "Advancing Stroke Care Through",
+			"titleHighlight": "Precision Engineering",
+			"description": "Cognition Medical develops cutting-edge interventional medical devices, bringing together world-class expertise from MIT, Harvard, and leading medical institutions to transform stroke treatment.",
+			"cta": "Learn More",
+			"ctaSecondary": "Meet Our Team"
+		},
+		"stats": {
+			"title": "Impact in Numbers",
+			"stroke": {
+				"value": "15M",
+				"label": "Strokes Annually",
+				"description": "Worldwide"
+			},
+			"time": {
+				"value": "4.5h",
+				"label": "Treatment Window",
+				"description": "For intervention"
+			},
+			"survival": {
+				"value": "80%",
+				"label": "Improved Outcomes",
+				"description": "With early treatment"
+			}
+		},
+		"value": {
+			"title": "Our Approach",
+			"subtitle": "Combining scientific rigor with clinical expertise to develop life-saving neurovascular devices",
+			"items": {
+				"innovation": {
+					"title": "Innovation-Driven",
+					"description": "Pioneering novel approaches to neurovascular intervention, backed by decades of research at world-leading institutions."
+				},
+				"expertise": {
+					"title": "Clinical Expertise",
+					"description": "Our team includes leading interventional neuroradiologists and neurosurgeons who understand real-world clinical needs."
+				},
+				"precision": {
+					"title": "Precision Engineering",
+					"description": "Every device is designed with meticulous attention to detail, ensuring optimal performance in critical moments."
+				}
+			}
+		},
+		"team": {
+			"title": "World-Class Expertise",
+			"subtitle": "Our leadership brings together decades of experience from the world's most prestigious institutions",
+			"cta": "Meet the Full Team"
+		},
+		"cta": {
+			"title": "Ready to Learn More?",
+			"description": "Connect with our team to discover how Cognition Medical is advancing the future of neurovascular care.",
+			"button": "Contact Us"
+		},
+		"journey": {
+			"scrollHint": "Scroll to explore",
+			"panels": {
+				"problem": {
+					"title": "The Challenge",
+					"description": "Every year, 15 million people worldwide suffer a stroke. Time is brain - every minute without treatment means millions of neurons lost. Current devices face limitations in navigating complex cerebral vasculature.",
+					"status": "Understanding the problem"
+				},
+				"solution": {
+					"title": "Our Innovation",
+					"description": "Cognition Medical's advanced catheter technology enables precise navigation through the brain's intricate vascular network. Our devices are engineered for exceptional trackability and control.",
+					"status": "Pioneering new approaches"
+				},
+				"technology": {
+					"title": "Precision Engineering",
+					"description": "Combining materials science from MIT with clinical insights from Harvard Medical School, we develop catheters that conform to vessel anatomy while maintaining the stiffness needed for control.",
+					"status": "Engineering excellence"
+				},
+				"impact": {
+					"title": "Saving Lives",
+					"description": "Our technology aims to improve first-pass effect rates in mechanical thrombectomy, reducing procedure time and improving patient outcomes. Every second counts.",
+					"status": "Making a difference"
+				}
+			}
+		}
+	},
+	"Technology": {
+		"hero": {
+			"tagline": "Our Technology",
+			"title": "Engineering the Future of",
+			"titleHighlight": "Neurovascular Care",
+			"description": "At Cognition Medical, we combine cutting-edge materials science with advanced engineering to develop next-generation devices for stroke intervention."
+		},
+		"products": {
+			"title": "Our Focus Areas",
+			"subtitle": "Developing innovative catheter solutions for neurovascular intervention",
+			"items": {
+				"navigation": {
+					"title": "Navigation Catheter",
+					"description": "Advanced navigation catheter designed for precise access to the cerebral vasculature, enabling clinicians to reach challenging anatomies with confidence.",
+					"feature1": "Exceptional trackability and control",
+					"feature2": "Optimized tip design for atraumatic navigation",
+					"feature3": "Compatible with standard neurovascular systems"
+				},
+				"aspiration": {
+					"title": "Aspiration Catheter",
+					"description": "High-performance aspiration catheter engineered for efficient clot removal in acute ischemic stroke, maximizing first-pass effect rates.",
+					"feature1": "Large bore design for superior aspiration",
+					"feature2": "Flexible distal segment for vessel conformability",
+					"feature3": "Rapid clot retrieval capabilities"
+				}
+			}
+		},
+		"approach": {
+			"title": "Our Approach",
+			"subtitle": "A multidisciplinary methodology rooted in scientific excellence",
+			"items": {
+				"research": {
+					"title": "Foundational Research",
+					"description": "Our work is built on rigorous scientific research, including studies on cellular events leading to vascular conditions conducted at MIT and Harvard Medical School."
+				},
+				"design": {
+					"title": "Human-Centered Design",
+					"description": "We design for the clinician and the patient, ensuring our devices are intuitive to use and optimized for the best possible outcomes."
+				},
+				"testing": {
+					"title": "Rigorous Testing",
+					"description": "Every device undergoes extensive testing and validation, meeting and exceeding regulatory standards before reaching patients."
+				},
+				"collaboration": {
+					"title": "Clinical Collaboration",
+					"description": "We work closely with leading interventional specialists worldwide to ensure our innovations address real clinical challenges."
+				}
+			}
+		},
+		"focus": {
+			"title": "Focus Areas",
+			"subtitle": "Developing solutions for the most critical neurovascular conditions",
+			"stroke": {
+				"title": "Acute Ischemic Stroke",
+				"description": "Time-critical interventions require devices that are fast, reliable, and effective. Our technology is designed to maximize clot retrieval while minimizing procedure time."
+			},
+			"access": {
+				"title": "Vascular Access",
+				"description": "Navigating the complex cerebral vasculature demands precision. Our devices provide exceptional trackability and control."
+			}
+		},
+		"cta": {
+			"title": "Partner With Us",
+			"description": "Interested in our technology or potential collaboration opportunities?",
+			"button": "Get in Touch"
+		}
+	},
+	"About": {
+		"hero": {
+			"tagline": "About Us",
+			"title": "A Mosaic of",
+			"titleHighlight": "Talented Individuals",
+			"description": "Cognition Medical's team is a mosaic of talented individuals, experts in engineering, biology, medicine, interventional medicine, regulatory, business and marketing that come together to develop cutting-edge interventional medical devices."
+		},
+		"mission": {
+			"label": "Our Mission",
+			"title": "Our Mission",
+			"description": "We are committed to advancing and improving healthcare through innovative medical device development. By combining world-class expertise with cutting-edge technology, we aim to transform outcomes for stroke patients worldwide."
+		},
+		"vision": {
+			"label": "Our Vision",
+			"title": "Building the Future of Stroke Care",
+			"description": "We envision a world where every stroke patient has access to the most advanced treatment options. Our team of experts from MIT, Harvard, and leading medical centers worldwide is dedicated to making this vision a reality.",
+			"cta": "Meet Our Team",
+			"stats": {
+				"mit": "MIT Research",
+				"harvard": "Harvard Medicine",
+				"experts": "Expert Advisors",
+				"years": "Years Experience"
+			}
+		},
+		"values": {
+			"title": "Our Values",
+			"subtitle": "The principles that guide everything we do",
+			"items": {
+				"excellence": {
+					"title": "Scientific Excellence",
+					"description": "We maintain the highest standards of scientific rigor in everything we do."
+				},
+				"innovation": {
+					"title": "Relentless Innovation",
+					"description": "We continuously push boundaries to develop better solutions for patients."
+				},
+				"collaboration": {
+					"title": "Collaborative Spirit",
+					"description": "We believe the best solutions emerge from diverse perspectives working together."
+				},
+				"impact": {
+					"title": "Patient Impact",
+					"description": "Every decision we make is guided by our commitment to improving patient outcomes."
+				}
+			}
+		},
+		"institutions": {
+			"title": "Academic Excellence",
+			"subtitle": "Our team brings expertise from the world's leading institutions",
+			"mit": "Massachusetts Institute of Technology",
+			"harvard": "Harvard Medical School",
+			"brigham": "Brigham and Women's Hospital",
+			"lyon": "University of Lyon"
+		}
+	},
+	"Team": {
+		"hero": {
+			"tagline": "Our Team",
+			"title": "Leadership &",
+			"titleHighlight": "Advisors",
+			"description": "Our team combines decades of experience in medical device development, clinical practice, and scientific research from the world's most prestigious institutions."
+		},
+		"sections": {
+			"founders": "Founders",
+			"clinicalAdvisors": "Clinical Advisors",
+			"advisors": "Other Advisors",
+			"legal": "Legal Counsel"
+		},
+		"members": {
+			"alexis": {
+				"name": "Alexis S. Turjman, PhD",
+				"role": "Chief Executive Officer, Board Member",
+				"bio": "Alex founded Cognition Medical while completing his PhD, which focused on the study of cellular events leading to heart attack in the Laboratory of Professor Elazer R. Edelman. His expertise spans Mechanical Engineering, Materials Science and Vascular Biology.",
+				"credentials": "PhD Materials Science, MIT • MS/BS Mechanical Engineering, A&M Paris"
+			},
+			"francis": {
+				"name": "Francis Turjman, MD, PhD",
+				"role": "Chief Medical Officer",
+				"bio": "Dr. Turjman is the Chief of Interventional Neuroradiology and the Director of the Stroke Center at Pierre Wertheimer Hospital in Lyon, France. He has pioneered several minimally-invasive techniques and is widely recognized as a leading expert in Interventional Neuroradiology.",
+				"credentials": "President-elect ESMINT Congress • Professor of Medicine, University of Lyon"
+			},
+			"elad": {
+				"name": "Elad I. Levy, MD, MBA",
+				"role": "Lead Scientific Advisor",
+				"bio": "Dr. Levy is the Chairman of Neurological Surgery and Professor of Neurosurgery and Radiology at SUNY Buffalo. He is a leader and pioneer who has guided the development of a majority of all novel neurovascular technology introduced in the past 10 years.",
+				"credentials": "North American PI for SWIFT PRIME • Director of Stroke Research"
+			},
+			"elazer": {
+				"name": "Elazer R. Edelman, MD, PhD",
+				"role": "Scientific Advisor",
+				"bio": "Dr. Edelman is the Thomas D. and Virginia W. Cabot Professor of Health Sciences and Technology at MIT, Professor of Medicine at Harvard Medical School. He and his laboratory have pioneered basic findings in vascular biology and biotechnology development.",
+				"credentials": "Director, Harvard-MIT Biomedical Engineering Center"
+			},
+			"robert": {
+				"name": "Robert Mellen, MBA",
+				"role": "Business Strategy Advisor",
+				"bio": "Bob Mellen has over 25 years of Medical Device Industry experience. He has delivered consistent double digit growth as President of a $200M device business and added over $800M in revenue growth over 10 years of Business Development leadership.",
+				"credentials": "Venture Partner, Aphelion Capital • Former VP, Bard Corporate Strategy"
+			},
+			"katharine": {
+				"name": "Katharine Stohlman, MBA, RAC",
+				"role": "Scientific and Regulatory Advisor",
+				"bio": "Kate Stohlman is a medical device executive with experience in clinical, regulatory, quality control and operations management. She serves as Vice President of Quality Assurance and Regulatory Affairs at Corvia Medical.",
+				"credentials": "MIT Materials Science • Harvard MBA • RAPS Certification for Europe"
+			},
+			"casey": {
+				"name": "Casey McGlynn, JD",
+				"role": "Corporate Counsel",
+				"bio": "Casey McGlynn is a Partner at Wilson Sonsini Goodrich and Rosati. In 1990, he formed the Life Sciences Group at WSGR, a nationally recognized leader in the representation of startup and emerging growth companies in the life sciences field.",
+				"credentials": "Partner, WSGR • Founder, Life Sciences Group"
+			}
+		}
+	},
+	"Contact": {
+		"hero": {
+			"tagline": "Contact Us",
+			"title": "Let's Start a",
+			"titleHighlight": "Conversation",
+			"description": "Whether you're interested in our technology, exploring partnership opportunities, or simply want to learn more about Cognition Medical, we'd love to hear from you."
+		},
+		"form": {
+			"title": "Send us a Message",
+			"subtitle": "Fill out the form below and we'll get back to you shortly",
+			"name": "Full Name",
+			"namePlaceholder": "John Doe",
+			"email": "Email Address",
+			"emailPlaceholder": "john@example.com",
+			"subject": "Subject",
+			"subjectPlaceholder": "How can we help?",
+			"message": "Message",
+			"messagePlaceholder": "Tell us more about your inquiry...",
+			"submit": "Send Message",
+			"sending": "Sending...",
+			"success": "Message Sent!",
+			"successDescription": "Thank you for reaching out. We'll get back to you within 24-48 hours.",
+			"error": "Something went wrong. Please try again."
+		},
+		"info": {
+			"title": "Get in Touch",
+			"tagline": "Advancing neurovascular care through precision engineering.",
+			"email": {
+				"label": "Email",
+				"value": "info@cognitionmedical.com"
+			},
+			"address": {
+				"label": "Address",
+				"value": "27 28th Street NW, Suite 4\nAtlanta, GA 30309"
+			},
+			"response": {
+				"title": "Quick Response Time",
+				"description": "We typically respond to all inquiries within 24-48 business hours."
+			}
+		}
+	}
+}

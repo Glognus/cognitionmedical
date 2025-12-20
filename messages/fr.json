@@ -1,0 +1,323 @@
+{
+	"Navigation": {
+		"home": "Accueil",
+		"technology": "Technologie",
+		"about": "À propos",
+		"team": "Équipe",
+		"contact": "Contact",
+		"getInTouch": "Nous contacter"
+	},
+	"Footer": {
+		"description": "Cognition Medical développe des dispositifs médicaux interventionnels de pointe, engagés dans l'avancement et l'amélioration des soins de santé en traitement neurovasculaire.",
+		"companyTitle": "Entreprise",
+		"contactTitle": "Contact",
+		"about": "À propos",
+		"team": "Notre équipe",
+		"technology": "Technologie",
+		"rights": "Tous droits réservés.",
+		"privacy": "Politique de confidentialité",
+		"terms": "Conditions d'utilisation"
+	},
+	"Home": {
+		"hero": {
+			"tagline": "Innovation Neurovasculaire",
+			"title": "Faire progresser les soins de l'AVC par",
+			"titleHighlight": "l'Ingénierie de Précision",
+			"description": "Cognition Medical développe des dispositifs médicaux interventionnels de pointe, réunissant une expertise mondiale du MIT, Harvard et des institutions médicales de premier plan pour transformer le traitement de l'AVC.",
+			"cta": "En savoir plus",
+			"ctaSecondary": "Notre équipe"
+		},
+		"stats": {
+			"title": "Impact en chiffres",
+			"stroke": {
+				"value": "15M",
+				"label": "AVC par an",
+				"description": "Dans le monde"
+			},
+			"time": {
+				"value": "4,5h",
+				"label": "Fenêtre de traitement",
+				"description": "Pour intervention"
+			},
+			"survival": {
+				"value": "80%",
+				"label": "Meilleurs résultats",
+				"description": "Avec traitement précoce"
+			}
+		},
+		"value": {
+			"title": "Notre approche",
+			"subtitle": "Allier rigueur scientifique et expertise clinique pour développer des dispositifs neurovasculaires qui sauvent des vies",
+			"items": {
+				"innovation": {
+					"title": "Innovation",
+					"description": "Pionnier de nouvelles approches en intervention neurovasculaire, soutenu par des décennies de recherche dans des institutions de renommée mondiale."
+				},
+				"expertise": {
+					"title": "Expertise clinique",
+					"description": "Notre équipe comprend des neuroradiologues interventionnels et neurochirurgiens de premier plan qui comprennent les besoins cliniques réels."
+				},
+				"precision": {
+					"title": "Ingénierie de précision",
+					"description": "Chaque dispositif est conçu avec une attention méticuleuse aux détails, garantissant des performances optimales dans les moments critiques."
+				}
+			}
+		},
+		"team": {
+			"title": "Expertise mondiale",
+			"subtitle": "Notre direction réunit des décennies d'expérience des institutions les plus prestigieuses au monde",
+			"cta": "Voir l'équipe complète"
+		},
+		"cta": {
+			"title": "Prêt à en savoir plus ?",
+			"description": "Connectez-vous avec notre équipe pour découvrir comment Cognition Medical fait avancer l'avenir des soins neurovasculaires.",
+			"button": "Contactez-nous"
+		},
+		"journey": {
+			"scrollHint": "Faites défiler pour explorer",
+			"panels": {
+				"problem": {
+					"title": "Le Défi",
+					"description": "Chaque année, 15 millions de personnes dans le monde sont victimes d'un AVC. Le temps c'est le cerveau - chaque minute sans traitement signifie des millions de neurones perdus. Les dispositifs actuels ont des limitations pour naviguer dans la vascularisation cérébrale complexe.",
+					"status": "Comprendre le problème"
+				},
+				"solution": {
+					"title": "Notre Innovation",
+					"description": "La technologie de cathéter avancée de Cognition Medical permet une navigation précise à travers le réseau vasculaire complexe du cerveau. Nos dispositifs sont conçus pour une traçabilité et un contrôle exceptionnels.",
+					"status": "Pionnier de nouvelles approches"
+				},
+				"technology": {
+					"title": "Ingénierie de Précision",
+					"description": "Combinant la science des matériaux du MIT avec les connaissances cliniques de Harvard Medical School, nous développons des cathéters qui s'adaptent à l'anatomie vasculaire tout en maintenant la rigidité nécessaire au contrôle.",
+					"status": "Excellence en ingénierie"
+				},
+				"impact": {
+					"title": "Sauver des Vies",
+					"description": "Notre technologie vise à améliorer les taux de succès au premier passage dans la thrombectomie mécanique, réduisant le temps de procédure et améliorant les résultats pour les patients. Chaque seconde compte.",
+					"status": "Faire la différence"
+				}
+			}
+		}
+	},
+	"Technology": {
+		"hero": {
+			"tagline": "Notre technologie",
+			"title": "Concevoir l'avenir des",
+			"titleHighlight": "Soins neurovasculaires",
+			"description": "Chez Cognition Medical, nous combinons la science des matériaux de pointe avec l'ingénierie avancée pour développer des dispositifs de nouvelle génération pour l'intervention de l'AVC."
+		},
+		"products": {
+			"title": "Nos domaines d'expertise",
+			"subtitle": "Développement de solutions cathéter innovantes pour l'intervention neurovasculaire",
+			"items": {
+				"navigation": {
+					"title": "Cathéter de navigation",
+					"description": "Cathéter de navigation avancé conçu pour un accès précis à la vascularisation cérébrale, permettant aux cliniciens d'atteindre des anatomies complexes en toute confiance.",
+					"feature1": "Traçabilité et contrôle exceptionnels",
+					"feature2": "Conception de pointe optimisée pour une navigation atraumatique",
+					"feature3": "Compatible avec les systèmes neurovasculaires standards"
+				},
+				"aspiration": {
+					"title": "Cathéter d'aspiration",
+					"description": "Cathéter d'aspiration haute performance conçu pour une extraction efficace des caillots dans l'AVC ischémique aigu, maximisant les taux de succès au premier passage.",
+					"feature1": "Conception à large calibre pour une aspiration supérieure",
+					"feature2": "Segment distal flexible pour la conformabilité vasculaire",
+					"feature3": "Capacités de récupération rapide des caillots"
+				}
+			}
+		},
+		"approach": {
+			"title": "Notre approche",
+			"subtitle": "Une méthodologie multidisciplinaire ancrée dans l'excellence scientifique",
+			"items": {
+				"research": {
+					"title": "Recherche fondamentale",
+					"description": "Notre travail repose sur une recherche scientifique rigoureuse, incluant des études sur les événements cellulaires menant aux conditions vasculaires menées au MIT et à Harvard Medical School."
+				},
+				"design": {
+					"title": "Conception centrée sur l'humain",
+					"description": "Nous concevons pour le clinicien et le patient, garantissant que nos dispositifs sont intuitifs à utiliser et optimisés pour les meilleurs résultats possibles."
+				},
+				"testing": {
+					"title": "Tests rigoureux",
+					"description": "Chaque dispositif subit des tests et validations approfondis, respectant et dépassant les normes réglementaires avant d'atteindre les patients."
+				},
+				"collaboration": {
+					"title": "Collaboration clinique",
+					"description": "Nous travaillons en étroite collaboration avec les spécialistes interventionnels de premier plan dans le monde pour garantir que nos innovations répondent aux défis cliniques réels."
+				}
+			}
+		},
+		"focus": {
+			"title": "Domaines d'intervention",
+			"subtitle": "Développer des solutions pour les conditions neurovasculaires les plus critiques",
+			"stroke": {
+				"title": "AVC ischémique aigu",
+				"description": "Les interventions critiques en temps nécessitent des dispositifs rapides, fiables et efficaces. Notre technologie est conçue pour maximiser la récupération du caillot tout en minimisant le temps de procédure."
+			},
+			"access": {
+				"title": "Accès vasculaire",
+				"description": "Naviguer dans la vascularisation cérébrale complexe demande de la précision. Nos dispositifs offrent une traçabilité et un contrôle exceptionnels."
+			}
+		},
+		"cta": {
+			"title": "Collaborez avec nous",
+			"description": "Intéressé par notre technologie ou des opportunités de collaboration ?",
+			"button": "Nous contacter"
+		}
+	},
+	"About": {
+		"hero": {
+			"tagline": "À propos",
+			"title": "Une mosaïque de",
+			"titleHighlight": "Talents exceptionnels",
+			"description": "L'équipe de Cognition Medical est une mosaïque d'individus talentueux, experts en ingénierie, biologie, médecine, médecine interventionnelle, réglementation, affaires et marketing qui se réunissent pour développer des dispositifs médicaux interventionnels de pointe."
+		},
+		"mission": {
+			"label": "Notre mission",
+			"title": "Notre mission",
+			"description": "Nous nous engageons à faire avancer et améliorer les soins de santé grâce au développement innovant de dispositifs médicaux. En combinant une expertise de classe mondiale avec une technologie de pointe, nous visons à transformer les résultats pour les patients victimes d'AVC dans le monde entier."
+		},
+		"vision": {
+			"label": "Notre vision",
+			"title": "Construire l'avenir des soins de l'AVC",
+			"description": "Nous envisageons un monde où chaque patient victime d'AVC a accès aux options de traitement les plus avancées. Notre équipe d'experts du MIT, Harvard et des centres médicaux de premier plan dans le monde est dédiée à faire de cette vision une réalité.",
+			"cta": "Rencontrer notre équipe",
+			"stats": {
+				"mit": "Recherche MIT",
+				"harvard": "Médecine Harvard",
+				"experts": "Conseillers experts",
+				"years": "Années d'expérience"
+			}
+		},
+		"values": {
+			"title": "Nos valeurs",
+			"subtitle": "Les principes qui guident tout ce que nous faisons",
+			"items": {
+				"excellence": {
+					"title": "Excellence scientifique",
+					"description": "Nous maintenons les plus hauts standards de rigueur scientifique dans tout ce que nous faisons."
+				},
+				"innovation": {
+					"title": "Innovation constante",
+					"description": "Nous repoussons continuellement les limites pour développer de meilleures solutions pour les patients."
+				},
+				"collaboration": {
+					"title": "Esprit collaboratif",
+					"description": "Nous croyons que les meilleures solutions émergent de perspectives diverses travaillant ensemble."
+				},
+				"impact": {
+					"title": "Impact patient",
+					"description": "Chaque décision que nous prenons est guidée par notre engagement à améliorer les résultats des patients."
+				}
+			}
+		},
+		"institutions": {
+			"title": "Excellence académique",
+			"subtitle": "Notre équipe apporte une expertise des institutions les plus prestigieuses au monde",
+			"mit": "Massachusetts Institute of Technology",
+			"harvard": "Harvard Medical School",
+			"brigham": "Brigham and Women's Hospital",
+			"lyon": "Université de Lyon"
+		}
+	},
+	"Team": {
+		"hero": {
+			"tagline": "Notre équipe",
+			"title": "Direction &",
+			"titleHighlight": "Conseillers",
+			"description": "Notre équipe combine des décennies d'expérience dans le développement de dispositifs médicaux, la pratique clinique et la recherche scientifique des institutions les plus prestigieuses au monde."
+		},
+		"sections": {
+			"founders": "Fondateurs",
+			"clinicalAdvisors": "Conseillers cliniques",
+			"advisors": "Autres conseillers",
+			"legal": "Conseil juridique"
+		},
+		"members": {
+			"alexis": {
+				"name": "Alexis S. Turjman, PhD",
+				"role": "Directeur général, Membre du conseil",
+				"bio": "Alex a fondé Cognition Medical tout en terminant son doctorat, axé sur l'étude des événements cellulaires menant à l'infarctus du myocarde dans le laboratoire du Professeur Elazer R. Edelman. Son expertise couvre l'ingénierie mécanique, la science des matériaux et la biologie vasculaire.",
+				"credentials": "PhD Science des matériaux, MIT • MS/BS Ingénierie mécanique, A&M Paris"
+			},
+			"francis": {
+				"name": "Francis Turjman, MD, PhD",
+				"role": "Directeur médical",
+				"bio": "Le Dr Turjman est Chef de la neuroradiologie interventionnelle et Directeur du Centre de l'AVC à l'Hôpital Pierre Wertheimer à Lyon. Il a été pionnier de plusieurs techniques mini-invasives et est largement reconnu comme expert de premier plan en neuroradiologie interventionnelle.",
+				"credentials": "Président élu du Congrès ESMINT • Professeur de médecine, Université de Lyon"
+			},
+			"elad": {
+				"name": "Elad I. Levy, MD, MBA",
+				"role": "Conseiller scientifique principal",
+				"bio": "Le Dr Levy est Président de la neurochirurgie et Professeur de neurochirurgie et radiologie à SUNY Buffalo. C'est un leader et pionnier qui a guidé le développement de la majorité de toutes les nouvelles technologies neurovasculaires introduites ces 10 dernières années.",
+				"credentials": "PI nord-américain pour SWIFT PRIME • Directeur de la recherche sur l'AVC"
+			},
+			"elazer": {
+				"name": "Elazer R. Edelman, MD, PhD",
+				"role": "Conseiller scientifique",
+				"bio": "Le Dr Edelman est Professeur Thomas D. et Virginia W. Cabot de sciences et technologies de la santé au MIT, Professeur de médecine à Harvard Medical School. Lui et son laboratoire ont été pionniers des découvertes fondamentales en biologie vasculaire.",
+				"credentials": "Directeur, Centre de génie biomédical Harvard-MIT"
+			},
+			"robert": {
+				"name": "Robert Mellen, MBA",
+				"role": "Conseiller en stratégie d'entreprise",
+				"bio": "Bob Mellen a plus de 25 ans d'expérience dans l'industrie des dispositifs médicaux. Il a généré une croissance constante à deux chiffres en tant que Président d'une entreprise de dispositifs de 200M$ et ajouté plus de 800M$ en croissance de revenus sur 10 ans de direction du développement commercial.",
+				"credentials": "Partner Venture, Aphelion Capital • Ancien VP, Stratégie Bard"
+			},
+			"katharine": {
+				"name": "Katharine Stohlman, MBA, RAC",
+				"role": "Conseillère scientifique et réglementaire",
+				"bio": "Kate Stohlman est une dirigeante de dispositifs médicaux avec une expérience en gestion clinique, réglementaire, contrôle qualité et opérations. Elle est Vice-Présidente Assurance Qualité et Affaires Réglementaires chez Corvia Medical.",
+				"credentials": "MIT Science des matériaux • Harvard MBA • Certification RAPS Europe"
+			},
+			"casey": {
+				"name": "Casey McGlynn, JD",
+				"role": "Conseiller juridique",
+				"bio": "Casey McGlynn est Associé chez Wilson Sonsini Goodrich and Rosati. En 1990, il a fondé le Life Sciences Group chez WSGR, un leader nationalement reconnu dans la représentation des startups et entreprises en croissance dans les sciences de la vie.",
+				"credentials": "Associé, WSGR • Fondateur, Life Sciences Group"
+			}
+		}
+	},
+	"Contact": {
+		"hero": {
+			"tagline": "Contactez-nous",
+			"title": "Démarrons une",
+			"titleHighlight": "Conversation",
+			"description": "Que vous soyez intéressé par notre technologie, que vous exploriez des opportunités de partenariat ou que vous souhaitiez simplement en savoir plus sur Cognition Medical, nous serions ravis de vous entendre."
+		},
+		"form": {
+			"title": "Envoyez-nous un message",
+			"subtitle": "Remplissez le formulaire ci-dessous et nous vous répondrons rapidement",
+			"name": "Nom complet",
+			"namePlaceholder": "Jean Dupont",
+			"email": "Adresse email",
+			"emailPlaceholder": "jean@exemple.com",
+			"subject": "Sujet",
+			"subjectPlaceholder": "Comment pouvons-nous vous aider ?",
+			"message": "Message",
+			"messagePlaceholder": "Dites-nous en plus sur votre demande...",
+			"submit": "Envoyer le message",
+			"sending": "Envoi en cours...",
+			"success": "Message envoyé !",
+			"successDescription": "Merci de nous avoir contacté. Nous vous répondrons sous 24 à 48 heures.",
+			"error": "Une erreur s'est produite. Veuillez réessayer."
+		},
+		"info": {
+			"title": "Nous contacter",
+			"tagline": "Faire avancer les soins neurovasculaires grâce à l'ingénierie de précision.",
+			"email": {
+				"label": "Email",
+				"value": "info@cognitionmedical.com"
+			},
+			"address": {
+				"label": "Adresse",
+				"value": "27 28th Street NW, Suite 4\nAtlanta, GA 30309"
+			},
+			"response": {
+				"title": "Temps de réponse rapide",
+				"description": "Nous répondons généralement à toutes les demandes sous 24 à 48 heures ouvrées."
+			}
+		}
+	}
+}
