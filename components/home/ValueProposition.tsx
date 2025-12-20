@@ -120,7 +120,7 @@ export function ValueProposition() {
 
 							{/* Number indicator */}
 							<div
-								className={`absolute -top-4 -right-2 font-display text-[120px] font-bold leading-none ${colorStyles[item.color].number} select-none pointer-events-none`}
+								className={`absolute -top-2 right-2 sm:-top-4 sm:-right-2 font-display text-[80px] sm:text-[120px] font-bold leading-none ${colorStyles[item.color].number} select-none pointer-events-none`}
 							>
 								{index + 1}
 							</div>

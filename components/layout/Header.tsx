@@ -224,10 +224,12 @@ export function Header() {
 					<div
 						className="space-y-4 border-t border-border pt-6"
 						style={{
-							transitionDelay: isMobileMenuOpen ? "300ms" : "0ms",
 							transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
 							opacity: isMobileMenuOpen ? 1 : 0,
-							transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+							transitionProperty: "transform, opacity",
+							transitionDuration: "0.4s",
+							transitionTimingFunction: "cubic-bezier(0.16, 1, 0.3, 1)",
+							transitionDelay: isMobileMenuOpen ? "300ms" : "0ms",
 						}}
 					>
 						{/* Theme & Language - Mobile */}

@@ -310,8 +310,8 @@ export default async function AboutPage({ params }: Props) {
 								/>
 
 								{/* Number indicator */}
-								<div className="absolute top-4 right-4 font-display text-4xl font-bold text-text/5">
-									0{index + 1}
+								<div className="absolute top-2 right-3 font-display text-5xl sm:text-6xl font-bold text-text/5 sm:top-4 sm:right-4">
+									{index + 1}
 								</div>
 
 								<div className={`relative icon-box h-12 w-12 ${colorStyles[value.color].icon}`}>
