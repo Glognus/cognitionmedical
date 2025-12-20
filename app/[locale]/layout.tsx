@@ -88,6 +88,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 			suppressHydrationWarning
 		>
 			<head>
+				{/* biome-ignore lint/security/noDangerouslySetInnerHtml: Required for theme script to prevent flash */}
 				<script dangerouslySetInnerHTML={{ __html: themeScript }} />
 			</head>
 			<body className="min-h-screen bg-bg antialiased">

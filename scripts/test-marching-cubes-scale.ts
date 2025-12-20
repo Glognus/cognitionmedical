@@ -52,7 +52,10 @@ function testMarchingCubesScale(inputRadius: number): {
 
 	// Measure actual output size
 	geometry.computeBoundingBox();
-	const bbox = geometry.boundingBox!;
+	const bbox = geometry.boundingBox;
+	if (!bbox) {
+		throw new Error("Failed to compute bounding box");
+	}
 	const outputSize = new THREE.Vector3();
 	bbox.getSize(outputSize);
 
@@ -128,7 +131,10 @@ function testTubeScale(inputRadius: number): {
 
 	// Measure actual output size - we care about X and Z (perpendicular to tube)
 	geometry.computeBoundingBox();
-	const bbox = geometry.boundingBox!;
+	const bbox = geometry.boundingBox;
+	if (!bbox) {
+		throw new Error("Failed to compute bounding box");
+	}
 	const outputSize = new THREE.Vector3();
 	bbox.getSize(outputSize);
 
@@ -169,7 +175,10 @@ function testActualVesselGeometry(inputRadius: number): {
 
 	// Measure actual output size
 	geometry.computeBoundingBox();
-	const bbox = geometry.boundingBox!;
+	const bbox = geometry.boundingBox;
+	if (!bbox) {
+		throw new Error("Failed to compute bounding box");
+	}
 	const outputSize = new THREE.Vector3();
 	bbox.getSize(outputSize);
 

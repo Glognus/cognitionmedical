@@ -120,7 +120,7 @@ export function CatheterPath({ className, progress }: CatheterPathProps) {
 			{isMoving &&
 				trailPositions.map((pos, i) => (
 					<g
-						key={`trail-${i}`}
+						key={`trail-${pos.x.toFixed(2)}-${pos.y.toFixed(2)}`}
 						transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.rotation})`}
 						opacity={0.15 - i * 0.04}
 					>

@@ -16,7 +16,13 @@ const panels: ContentPanel[] = [
 	{
 		key: "problem",
 		icon: (
-			<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg
+				className="h-6 w-6"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				aria-hidden="true"
+			>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
@@ -30,7 +36,13 @@ const panels: ContentPanel[] = [
 	{
 		key: "solution",
 		icon: (
-			<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg
+				className="h-6 w-6"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				aria-hidden="true"
+			>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
@@ -44,7 +56,13 @@ const panels: ContentPanel[] = [
 	{
 		key: "technology",
 		icon: (
-			<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg
+				className="h-6 w-6"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				aria-hidden="true"
+			>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"
@@ -58,7 +76,13 @@ const panels: ContentPanel[] = [
 	{
 		key: "impact",
 		icon: (
-			<svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+			<svg
+				className="h-6 w-6"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				aria-hidden="true"
+			>
 				<path
 					strokeLinecap="round"
 					strokeLinejoin="round"

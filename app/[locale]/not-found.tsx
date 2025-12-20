@@ -26,7 +26,13 @@ export default function NotFound() {
 				href="/"
 				className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary-900 to-primary-700 px-8 py-3 font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl"
 			>
-				<svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<svg
+					className="h-5 w-5"
+					fill="none"
+					stroke="currentColor"
+					viewBox="0 0 24 24"
+					aria-hidden="true"
+				>
 					<path
 						strokeLinecap="round"
 						strokeLinejoin="round"

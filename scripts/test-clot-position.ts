@@ -88,7 +88,10 @@ console.log("\n=== MEASURING ACTUAL VESSEL RADIUS ===\n");
 const leftBranchGeometry = generateVesselGeometry([{ path: leftBranchPath, radius: 0.16 }]);
 
 leftBranchGeometry.computeBoundingBox();
-const bbox = leftBranchGeometry.boundingBox!;
+const bbox = leftBranchGeometry.boundingBox;
+if (!bbox) {
+	throw new Error("Failed to compute bounding box for left branch geometry");
+}
 const size = new THREE.Vector3();
 bbox.getSize(size);
 

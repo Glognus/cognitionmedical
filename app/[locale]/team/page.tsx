@@ -101,13 +101,11 @@ function TeamSection({
 	members,
 	t,
 	color = "primary",
-	columns = "auto",
 }: {
 	title: string;
 	members: { key: string; image: string }[];
 	t: (key: string) => string;
 	color?: "primary" | "secondary" | "accent";
-	columns?: "auto" | 1 | 2 | 3 | 4;
 }) {
 	const gridCols = "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
 

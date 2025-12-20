@@ -719,12 +719,14 @@ function RedBloodCells({
 							),
 						});
 					}
-					const stuck = stuckPositions.current.get(i)!;
-					pos.copy(stuck.pos);
-					// Add subtle jitter animation
-					pos.x += stuck.jitter.x + Math.sin(time * 3 + i) * 0.003;
-					pos.y += stuck.jitter.y + Math.cos(time * 4 + i) * 0.003;
-					pos.z += stuck.jitter.z + Math.sin(time * 2.5 + i) * 0.003;
+					const stuck = stuckPositions.current.get(i);
+					if (stuck) {
+						pos.copy(stuck.pos);
+						// Add subtle jitter animation
+						pos.x += stuck.jitter.x + Math.sin(time * 3 + i) * 0.003;
+						pos.y += stuck.jitter.y + Math.cos(time * 4 + i) * 0.003;
+						pos.z += stuck.jitter.z + Math.sin(time * 2.5 + i) * 0.003;
+					}
 				} else {
 					stuckPositions.current.delete(i);
 				}
@@ -852,11 +854,13 @@ function WhiteBloodCells({
 							),
 						});
 					}
-					const stuck = stuckPositions.current.get(i)!;
-					pos.copy(stuck.pos);
-					pos.x += stuck.jitter.x + Math.sin(time * 2 + i) * 0.005;
-					pos.y += stuck.jitter.y + Math.cos(time * 3 + i) * 0.005;
-					pos.z += stuck.jitter.z;
+					const stuck = stuckPositions.current.get(i);
+					if (stuck) {
+						pos.copy(stuck.pos);
+						pos.x += stuck.jitter.x + Math.sin(time * 2 + i) * 0.005;
+						pos.y += stuck.jitter.y + Math.cos(time * 3 + i) * 0.005;
+						pos.z += stuck.jitter.z;
+					}
 				} else {
 					stuckPositions.current.delete(i);
 				}
@@ -1000,11 +1004,13 @@ function Platelets({
 							),
 						});
 					}
-					const stuck = stuckPositions.current.get(i)!;
-					pos.copy(stuck.pos);
-					pos.x += stuck.jitter.x + Math.sin(time * 5 + i) * 0.002;
-					pos.y += stuck.jitter.y + Math.cos(time * 6 + i) * 0.002;
-					pos.z += stuck.jitter.z;
+					const stuck = stuckPositions.current.get(i);
+					if (stuck) {
+						pos.copy(stuck.pos);
+						pos.x += stuck.jitter.x + Math.sin(time * 5 + i) * 0.002;
+						pos.y += stuck.jitter.y + Math.cos(time * 6 + i) * 0.002;
+						pos.z += stuck.jitter.z;
+					}
 				} else {
 					stuckPositions.current.delete(i);
 				}
@@ -1412,7 +1418,7 @@ function AspiratedParticles({
 				rotationOffset: seed * Math.PI * 2,
 			};
 		});
-	}, []);
+	}, [particleCount]);
 
 	useFrame((state) => {
 		if (!particlesRef.current || !isAspirating) return;
@@ -1592,7 +1598,14 @@ function SuctionVortex({
 	);
 }
 
-function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition, isMobile = false }: ClotProps) {
+function Clot({
+	path,
+	tPosition,
+	vesselRadius,
+	progress,
+	catheterTipPosition,
+	isMobile = false,
+}: ClotProps) {
 	const mainRef = useRef<THREE.Group>(null);
 	const clotMeshRef = useRef<THREE.Mesh>(null);
 
@@ -1970,7 +1983,13 @@ export function VascularScene3D() {
 							gl={{ antialias: !isMobile, alpha: true }}
 							style={{ background: "transparent" }}
 						>
-							<PerspectiveCamera makeDefault position={[4, 4, 10]} fov={isMobile ? 55 : 50} near={0.1} far={100} />
+							<PerspectiveCamera
+								makeDefault
+								position={[4, 4, 10]}
+								fov={isMobile ? 55 : 50}
+								near={0.1}
+								far={100}
+							/>
 							<Suspense fallback={<Loader />}>
 								<Scene progress={progress} isMobile={isMobile} />
 							</Suspense>
@@ -2020,23 +2039,33 @@ export function VascularScene3D() {
 												isPast ? "md:opacity-40 md:scale-95" : "",
 												isFuture ? "md:opacity-20 md:scale-95" : "",
 											)}
-											style={isMobile ? {
-												position: 'absolute',
-												top: '50%',
-												left: 0,
-												right: 0,
-												transform: isActive
-													? 'translateY(-50%) scale(1)'
-													: isPast
-														? `translateY(calc(-50% - ${Math.abs(distance) * 120}%)) scale(0.9)`
-														: `translateY(calc(-50% + ${Math.abs(distance) * 120}%)) scale(0.9)`,
-												opacity: isActive ? 1 : 0,
-												zIndex: isActive ? 10 : 5 - Math.abs(distance),
-												pointerEvents: isActive ? 'auto' : 'none',
-												borderColor: isActive ? 'var(--color-border-hover)' : 'var(--color-border)',
-											} : {
-												borderColor: isActive ? 'var(--color-border-hover)' : isPast ? 'var(--color-border)' : 'transparent',
-											}}
+											style={
+												isMobile
+													? {
+															position: "absolute",
+															top: "50%",
+															left: 0,
+															right: 0,
+															transform: isActive
+																? "translateY(-50%) scale(1)"
+																: isPast
+																	? `translateY(calc(-50% - ${Math.abs(distance) * 120}%)) scale(0.9)`
+																	: `translateY(calc(-50% + ${Math.abs(distance) * 120}%)) scale(0.9)`,
+															opacity: isActive ? 1 : 0,
+															zIndex: isActive ? 10 : 5 - Math.abs(distance),
+															pointerEvents: isActive ? "auto" : "none",
+															borderColor: isActive
+																? "var(--color-border-hover)"
+																: "var(--color-border)",
+														}
+													: {
+															borderColor: isActive
+																? "var(--color-border-hover)"
+																: isPast
+																	? "var(--color-border)"
+																	: "transparent",
+														}
+											}
 										>
 											<h3 className="font-display text-lg md:text-xl font-bold text-text">
 												{t(`panels.${panel.key}.title`)}
@@ -2079,6 +2108,7 @@ export function VascularScene3D() {
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
+							aria-hidden="true"
 						>
 							<path
 								strokeLinecap="round"

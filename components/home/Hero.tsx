@@ -39,7 +39,7 @@ export function Hero() {
 
 					{/* Medical-inspired geometric accent */}
 					<div className="absolute top-1/4 right-0 w-[600px] h-[600px] opacity-[0.03]">
-						<svg viewBox="0 0 400 400" fill="none" className="w-full h-full">
+						<svg viewBox="0 0 400 400" fill="none" className="w-full h-full" aria-hidden="true">
 							<circle
 								cx="200"
 								cy="200"
