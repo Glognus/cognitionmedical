@@ -1348,6 +1348,7 @@ interface ClotProps {
 	vesselRadius: number;
 	progress: number;
 	catheterTipPosition: THREE.Vector3;
+	isMobile?: boolean;
 }
 
 // Aspirated particles - clot fragments being sucked into catheter lumen
@@ -1357,15 +1358,17 @@ function AspiratedParticles({
 	catheterDirection,
 	aspirationProgress,
 	isAspirating,
+	isMobile = false,
 }: {
 	clotPosition: THREE.Vector3;
 	catheterTipPosition: THREE.Vector3;
 	catheterDirection: THREE.Vector3;
 	aspirationProgress: number;
 	isAspirating: boolean;
+	isMobile?: boolean;
 }) {
 	const particlesRef = useRef<THREE.InstancedMesh>(null);
-	const particleCount = 60;
+	const particleCount = isMobile ? 25 : 60;
 	const dummy = useMemo(() => new THREE.Object3D(), []);
 
 	// Organic irregular fragment geometry - larger chunks
@@ -1497,13 +1500,15 @@ function SuctionVortex({
 	catheterTipPosition,
 	isAspirating,
 	intensity,
+	isMobile = false,
 }: {
 	catheterTipPosition: THREE.Vector3;
 	isAspirating: boolean;
 	intensity: number;
+	isMobile?: boolean;
 }) {
 	const vortexRef = useRef<THREE.Points>(null);
-	const particleCount = 60;
+	const particleCount = isMobile ? 25 : 60;
 
 	const { positions, velocities } = useMemo(() => {
 		const pos = new Float32Array(particleCount * 3);
@@ -1519,7 +1524,7 @@ function SuctionVortex({
 			vel[i * 3 + 2] = (Math.random() - 0.5) * 0.02;
 		}
 		return { positions: pos, velocities: vel };
-	}, []);
+	}, [particleCount]);
 
 	// Create buffer geometry with position attribute - must be before any conditional return
 	const geometry = useMemo(() => {
@@ -1587,7 +1592,7 @@ function SuctionVortex({
 	);
 }
 
-function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: ClotProps) {
+function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition, isMobile = false }: ClotProps) {
 	const mainRef = useRef<THREE.Group>(null);
 	const clotMeshRef = useRef<THREE.Mesh>(null);
 
@@ -1664,6 +1669,7 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 					.normalize()}
 				aspirationProgress={dissolveProgress}
 				isAspirating={aspiratingPhase}
+				isMobile={isMobile}
 			/>
 
 			{/* Suction vortex effect */}
@@ -1671,6 +1677,7 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 				catheterTipPosition={catheterTipPosition}
 				isAspirating={contactPhase || aspiratingPhase}
 				intensity={aspiratingPhase ? 1.2 : 0.3}
+				isMobile={isMobile}
 			/>
 
 			{/* Suction effect light */}
@@ -1781,7 +1788,7 @@ function Loader() {
 // MAIN SCENE
 // ============================================
 
-function Scene({ progress }: { progress: number }) {
+function Scene({ progress, isMobile = false }: { progress: number; isMobile?: boolean }) {
 	const catheterPath = useMemo(() => createCatheterPath(), []);
 
 	// Continuous blood flow paths (main → branches)
@@ -1825,10 +1832,10 @@ function Scene({ progress }: { progress: number }) {
 			{/* Unified Blood Vessel Network */}
 			<UnifiedVesselNetwork />
 
-			{/* Blood Particles - flow stops at clot until cleared */}
+			{/* Blood Particles - reduced count on mobile for performance */}
 			<BloodParticles
 				paths={bloodFlowPaths}
-				count={400}
+				count={isMobile ? 150 : 400}
 				clotWorldPosition={clotWorldPosition}
 				clotRadius={clotVesselRadius * 1.2}
 				clotCleared={clotCleared}
@@ -1849,6 +1856,7 @@ function Scene({ progress }: { progress: number }) {
 				vesselRadius={clotVesselRadius}
 				progress={progress}
 				catheterTipPosition={catheterTipPosition}
+				isMobile={isMobile}
 			/>
 
 			{/* Camera */}
@@ -1868,6 +1876,15 @@ export function VascularScene3D() {
 	const [displayProgress, setDisplayProgress] = useState(0);
 	const [isVisible, setIsVisible] = useState(false);
 	const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
+
+	// Detect mobile viewport
+	useEffect(() => {
+		const checkMobile = () => setIsMobile(window.innerWidth < 768);
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
 
 	useEffect(() => {
 		const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -1892,7 +1909,8 @@ export function VascularScene3D() {
 		const rect = containerRef.current.getBoundingClientRect();
 		const vh = window.innerHeight;
 		const scrolled = vh - rect.top;
-		const total = rect.height + vh * 0.5;
+		// Mobile uses shorter scroll distance for faster animation
+		const total = rect.height + vh * (isMobile ? 0.3 : 0.5);
 		const rawP = Math.max(0, Math.min(1, scrolled / total));
 		// Scale progress so animation (which ends at 0.75) completes at 100% scroll
 		const p = rawP * 0.75;
@@ -1900,7 +1918,7 @@ export function VascularScene3D() {
 			setProgress(p);
 			setDisplayProgress(rawP); // For UI display (0-100%)
 		});
-	}, [isVisible, prefersReducedMotion]);
+	}, [isVisible, prefersReducedMotion, isMobile]);
 
 	useEffect(() => {
 		if (!isVisible) return;
@@ -1936,81 +1954,128 @@ export function VascularScene3D() {
 		);
 	}
 
+	// Shorter scroll distance on mobile for faster animation
+	const scrollHeight = isMobile ? "min-h-[200vh]" : "min-h-[400vh]";
+
 	return (
-		<section ref={containerRef} className="relative min-h-[400vh]">
-			<div className="sticky top-0 h-screen overflow-hidden">
-				<div className="absolute inset-0 flex">
+		<section ref={containerRef} className={cn("relative", scrollHeight)}>
+			{/* Sticky container - offset for header on mobile */}
+			<div className="sticky top-[72px] md:top-0 h-[calc(100vh-72px)] md:h-screen overflow-hidden">
+				<div className="absolute inset-0 flex flex-col md:flex-row">
 					{/* 3D Canvas */}
-					<div className="relative w-1/2 h-full">
+					<div className="relative w-full h-[40vh] md:h-full md:w-1/2">
 						<Canvas
 							shadows
-							dpr={[1, 2]}
-							gl={{ antialias: true, alpha: true }}
+							dpr={isMobile ? [1, 1.5] : [1, 2]}
+							gl={{ antialias: !isMobile, alpha: true }}
 							style={{ background: "transparent" }}
 						>
-							<PerspectiveCamera makeDefault position={[4, 4, 10]} fov={50} near={0.1} far={100} />
+							<PerspectiveCamera makeDefault position={[4, 4, 10]} fov={isMobile ? 55 : 50} near={0.1} far={100} />
 							<Suspense fallback={<Loader />}>
-								<Scene progress={progress} />
+								<Scene progress={progress} isMobile={isMobile} />
 							</Suspense>
 						</Canvas>
-						<div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-transparent to-bg" />
+						{/* Gradient overlay - bottom on mobile, right on desktop */}
+						<div className="absolute inset-0 pointer-events-none bg-gradient-to-b md:bg-gradient-to-r from-transparent via-transparent to-bg" />
 					</div>
 
-					{/* Content */}
-					<div className="w-1/2 h-full flex items-center">
-						<div className="w-full max-w-lg px-8 lg:px-12">
-							{panels.map((panel, idx) => {
-								const isActive = idx === activePanel;
-								const isPast = idx < activePanel;
-								return (
-									<div
-										key={panel.key}
-										className={cn(
-											"relative mb-6 p-6 rounded-2xl border transition-all duration-500",
-											isActive
-												? "bg-bg-card border-border-hover scale-100 opacity-100"
-												: isPast
-													? "bg-bg-elevated/50 border-border scale-95 opacity-40"
-													: "bg-transparent border-transparent scale-95 opacity-20",
-										)}
-									>
-										<h3 className="font-display text-xl font-bold text-text">
-											{t(`panels.${panel.key}.title`)}
-										</h3>
-										<p className="mt-2 text-sm text-text-muted leading-relaxed">
-											{t(`panels.${panel.key}.description`)}
-										</p>
-										{isActive && (
-											<div className="inline-flex items-center gap-2 mt-4 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-xs font-medium text-primary">
-												<span className="live-dot" />
-												<span>{t(`panels.${panel.key}.status`)}</span>
-											</div>
-										)}
-									</div>
-								);
-							})}
+					{/* Content - Card Stack on Mobile */}
+					<div className="w-full flex-1 md:h-full md:w-1/2 flex items-center justify-center md:items-center overflow-hidden">
+						<div className="relative w-full max-w-lg px-4 md:px-8 lg:px-12 mx-auto md:mx-0 h-full md:h-auto flex flex-col items-center justify-center">
+							{/* Pagination dots - mobile only */}
+							{isMobile && (
+								<div className="flex items-center gap-2 mb-4">
+									{panels.map((panel, idx) => (
+										<div
+											key={panel.key}
+											className={cn(
+												"h-1.5 rounded-full transition-all duration-300",
+												idx === activePanel
+													? "w-6 bg-primary"
+													: idx < activePanel
+														? "w-1.5 bg-primary/50"
+														: "w-1.5 bg-border",
+											)}
+										/>
+									))}
+								</div>
+							)}
+							{/* Stack container for mobile */}
+							<div className="relative w-full flex-1 md:flex-none">
+								{panels.map((panel, idx) => {
+									const isActive = idx === activePanel;
+									const isPast = idx < activePanel;
+									const isFuture = idx > activePanel;
+									const distance = idx - activePanel;
+
+									return (
+										<div
+											key={panel.key}
+											className={cn(
+												"w-full p-4 md:p-6 rounded-xl md:rounded-2xl border bg-bg-card transition-all duration-300 ease-out",
+												// Mobile: absolute positioning for stack effect
+												"md:relative md:mb-6",
+												// Desktop: normal flow
+												isActive ? "md:opacity-100 md:scale-100" : "",
+												isPast ? "md:opacity-40 md:scale-95" : "",
+												isFuture ? "md:opacity-20 md:scale-95" : "",
+											)}
+											style={isMobile ? {
+												position: 'absolute',
+												top: '50%',
+												left: 0,
+												right: 0,
+												transform: isActive
+													? 'translateY(-50%) scale(1)'
+													: isPast
+														? `translateY(calc(-50% - ${Math.abs(distance) * 120}%)) scale(0.9)`
+														: `translateY(calc(-50% + ${Math.abs(distance) * 120}%)) scale(0.9)`,
+												opacity: isActive ? 1 : 0,
+												zIndex: isActive ? 10 : 5 - Math.abs(distance),
+												pointerEvents: isActive ? 'auto' : 'none',
+												borderColor: isActive ? 'var(--color-border-hover)' : 'var(--color-border)',
+											} : {
+												borderColor: isActive ? 'var(--color-border-hover)' : isPast ? 'var(--color-border)' : 'transparent',
+											}}
+										>
+											<h3 className="font-display text-lg md:text-xl font-bold text-text">
+												{t(`panels.${panel.key}.title`)}
+											</h3>
+											<p className="mt-1.5 md:mt-2 text-xs md:text-sm text-text-muted leading-relaxed">
+												{t(`panels.${panel.key}.description`)}
+											</p>
+											{isActive && (
+												<div className="inline-flex items-center gap-1.5 md:gap-2 mt-2.5 md:mt-4 px-2.5 md:px-3 py-1 md:py-1.5 rounded-full bg-primary/10 border border-primary/30 text-[10px] md:text-xs font-medium text-primary">
+													<span className="live-dot" />
+													<span>{t(`panels.${panel.key}.status`)}</span>
+												</div>
+											)}
+										</div>
+									);
+								})}
+							</div>
 						</div>
 					</div>
 				</div>
 
-				{/* Progress */}
-				<div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4">
-					<div className="w-32 h-1 rounded-full bg-border overflow-hidden">
+				{/* Progress - repositioned for mobile */}
+				<div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 md:gap-4 z-10">
+					<div className="w-24 md:w-32 h-1 rounded-full bg-border overflow-hidden">
 						<div
 							className="h-full bg-primary rounded-full transition-all"
 							style={{ width: `${displayProgress * 100}%` }}
 						/>
 					</div>
-					<span className="text-xs text-text-muted font-mono">
+					<span className="text-[10px] md:text-xs text-text-muted font-mono">
 						{Math.round(displayProgress * 100)}%
 					</span>
 				</div>
 
 				{displayProgress < 0.05 && (
-					<div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-						<span className="text-xs text-text-subtle">{t("scrollHint")}</span>
+					<div className="absolute bottom-14 md:bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 md:gap-2 animate-bounce z-10">
+						<span className="text-[10px] md:text-xs text-text-subtle">{t("scrollHint")}</span>
 						<svg
-							className="h-5 w-5 text-text-subtle"
+							className="h-4 w-4 md:h-5 md:w-5 text-text-subtle"
 							fill="none"
 							stroke="currentColor"
 							viewBox="0 0 24 24"
