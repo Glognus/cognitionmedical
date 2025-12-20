@@ -264,17 +264,17 @@ export default async function TechnologyPage({ params }: Props) {
 						</p>
 					</div>
 
-					<div className="mt-14 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
+					<div className="mt-14 grid gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4">
 						{approachItems.map((item, index) => (
-							<div key={item.key} className="group relative">
+							<div key={item.key} className="group relative pt-3 pl-3">
 								{/* Connector line */}
 								{index < approachItems.length - 1 && (
-									<div className="absolute top-8 left-full hidden h-px w-full bg-gradient-to-r from-primary/30 to-transparent lg:block" />
+									<div className="absolute top-11 left-full hidden h-px w-full bg-gradient-to-r from-primary/30 to-transparent lg:block" />
 								)}
 
-								<div className="card card-accent-bottom relative overflow-hidden p-5 sm:p-6 transition-all duration-300 group-hover:border-primary/30">
+								<div className="card card-accent-bottom relative h-full flex flex-col p-5 sm:p-6 transition-all duration-300 group-hover:border-primary/30">
 									{/* Step number */}
-									<div className="absolute -top-2 -left-2 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-bg">
+									<div className="absolute -top-3 -left-3 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-bold text-bg shadow-lg shadow-primary/30">
 										{index + 1}
 									</div>
 
@@ -285,7 +285,7 @@ export default async function TechnologyPage({ params }: Props) {
 									<h3 className="mt-4 font-display text-base font-semibold text-text sm:text-lg">
 										{t(`approach.items.${item.key}.title`)}
 									</h3>
-									<p className="mt-2 text-sm text-text-muted leading-relaxed">
+									<p className="mt-2 flex-grow text-sm text-text-muted leading-relaxed">
 										{t(`approach.items.${item.key}.description`)}
 									</p>
 								</div>

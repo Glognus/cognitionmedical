@@ -209,153 +209,363 @@ function UnifiedVesselNetwork() {
 }
 
 // ============================================
-// CATHETER COMPONENT
+// CATHETER COMPONENT - Neurovascular Aspiration System
+// Concentric tube design: outer catheter + inner catheter
 // ============================================
 
 interface CatheterProps {
 	path: THREE.CatmullRomCurve3;
 	progress: number;
-	length?: number;
+	isDeploying?: boolean;
+	isAspirating?: boolean;
 }
 
-function Catheter({ path, progress }: CatheterProps) {
-	const tipGlowRef = useRef<THREE.PointLight>(null);
+function Catheter({ path, progress, isDeploying = false, isAspirating = false }: CatheterProps) {
+	const deployRingRef = useRef<THREE.Mesh>(null);
+	const deployGlowRef = useRef<THREE.Mesh>(null);
+	const suctionRingRef = useRef<THREE.Mesh>(null);
+	const suctionParticlesRef = useRef<THREE.Points>(null);
 
-	const { position, tangent, catheterGeometry, guidewireGeometry, tipGeometry } = useMemo(() => {
-		const t = Math.max(0.001, Math.min(0.999, progress));
-		const pos = path.getPoint(t);
-		const tang = path.getTangent(t).normalize();
+	// Catheter dimensions - scaled to match visual vessel size
+	// Visual vessel radius ≈ 0.16 * 2.35 = 0.376 (left branch)
+	// Catheter should be ~80% of visual vessel = 0.30
+	const OUTER_RADIUS = 0.30; // Outer catheter radius (80% of visual vessel)
+	const INNER_RADIUS = 0.18; // Inner catheter radius
+	const INNER_WALL = 0.025; // Inner wall thickness
 
-		const points: THREE.Vector3[] = [];
+	// Outer catheter stops at 40%, inner continues to full progress
+	const OUTER_STOP_PROGRESS = 0.40;
 
-		// Part 1: From tip (current progress) back to path start
-		const numPathSegments = 60;
+	const {
+		innerPosition, innerTangent, outerPosition, outerTangent, outerCatheterGeo, innerCatheterGeo, lumenGeo
+	} = useMemo(() => {
+		// Outer catheter progress (stops at 40%)
+		const outerT = Math.max(0.001, Math.min(OUTER_STOP_PROGRESS, progress));
+		const outerPos = path.getPoint(outerT);
+		const outerTang = path.getTangent(outerT).normalize();
+
+		// Inner catheter progress (continues to full progress)
+		const innerT = Math.max(0.001, Math.min(0.999, progress));
+		const innerPos = path.getPoint(innerT);
+		const innerTang = path.getTangent(innerT).normalize();
+
+		// Build OUTER catheter path (stops at 40%)
+		const outerPoints: THREE.Vector3[] = [];
+		const numPathSegments = 80;
 		for (let i = 0; i < numPathSegments; i++) {
-			const segmentT = t * (1 - i / (numPathSegments - 1));
-			points.push(path.getPoint(Math.max(0, segmentT)));
+			const segmentT = outerT * (1 - i / (numPathSegments - 1));
+			outerPoints.push(path.getPoint(Math.max(0, segmentT)));
 		}
 
-		// Part 2: Extend FAR beyond path start (going down/backward)
+		// Extend beyond path start
 		const startPoint = path.getPoint(0);
 		const startTangent = path.getTangent(0).normalize();
-		const extensionLength = 15; // Long extension
+		const extensionLength = 15;
 		const extensionSegments = 40;
 
 		for (let i = 1; i <= extensionSegments; i++) {
 			const extendDist = (i / extensionSegments) * extensionLength;
-			const extendedPoint = new THREE.Vector3(
+			outerPoints.push(new THREE.Vector3(
 				startPoint.x - startTangent.x * extendDist,
 				startPoint.y - startTangent.y * extendDist,
 				startPoint.z - startTangent.z * extendDist
-			);
-			points.push(extendedPoint);
+			));
 		}
 
-		if (points.length < 2) {
-			return { position: pos, tangent: tang, catheterGeometry: null, guidewireGeometry: null, tipGeometry: null };
+		// Build INNER catheter path (continues to full progress)
+		const innerPoints: THREE.Vector3[] = [];
+		for (let i = 0; i < numPathSegments; i++) {
+			const segmentT = innerT * (1 - i / (numPathSegments - 1));
+			innerPoints.push(path.getPoint(Math.max(0, segmentT)));
 		}
 
-		const curve = new THREE.CatmullRomCurve3(points);
-		const catheterRadius = 0.22;
-		const guideRadius = catheterRadius * 0.35;
-		const cathGeo = new THREE.TubeGeometry(curve, 100, catheterRadius, 16, false);
-		const guideGeo = new THREE.TubeGeometry(curve, 100, guideRadius, 12, false);
-
-		// Create smooth rounded tip using lathe geometry
-		// Profile: starts at tube radius, curves smoothly to a rounded end
-		const tipLength = 0.35;
-		const tipPoints: THREE.Vector2[] = [];
-		const tipSegments = 20;
-
-		for (let i = 0; i <= tipSegments; i++) {
-			const tParam = i / tipSegments;
-			// Smooth curve from tube radius to center point
-			// Using cosine curve for smooth transition
-			const angle = tParam * Math.PI * 0.5;
-			const radius = catheterRadius * Math.cos(angle);
-			const z = tipLength * Math.sin(angle);
-			tipPoints.push(new THREE.Vector2(radius, z));
+		// Extend inner catheter beyond path start too
+		for (let i = 1; i <= extensionSegments; i++) {
+			const extendDist = (i / extensionSegments) * extensionLength;
+			innerPoints.push(new THREE.Vector3(
+				startPoint.x - startTangent.x * extendDist,
+				startPoint.y - startTangent.y * extendDist,
+				startPoint.z - startTangent.z * extendDist
+			));
 		}
 
-		const tipGeo = new THREE.LatheGeometry(tipPoints, 24);
+		if (outerPoints.length < 2 || innerPoints.length < 2) {
+			return {
+				innerPosition: innerPos, innerTangent: innerTang,
+				outerCatheterGeo: null, innerCatheterGeo: null, lumenGeo: null
+			};
+		}
 
-		return { position: pos, tangent: tang, catheterGeometry: cathGeo, guidewireGeometry: guideGeo, tipGeometry: tipGeo };
+		const outerCurve = new THREE.CatmullRomCurve3(outerPoints);
+		const innerCurve = new THREE.CatmullRomCurve3(innerPoints);
+
+		// Outer catheter tube
+		const outerGeo = new THREE.TubeGeometry(outerCurve, 120, OUTER_RADIUS, 24, false);
+
+		// Inner catheter tube (follows its own longer path)
+		const innerGeo = new THREE.TubeGeometry(innerCurve, 120, INNER_RADIUS, 20, false);
+
+		// Inner lumen (dark inside)
+		const lumen = new THREE.TubeGeometry(innerCurve, 120, INNER_RADIUS - INNER_WALL, 16, false);
+
+		// Tubes have open ends naturally - no separate tip geometry needed
+
+		return {
+			innerPosition: innerPos,
+			innerTangent: innerTang,
+			outerPosition: outerPos,
+			outerTangent: outerTang,
+			outerCatheterGeo: outerGeo,
+			innerCatheterGeo: innerGeo,
+			lumenGeo: lumen
+		};
 	}, [path, progress]);
 
+	// Calculate rotation for tips (perpendicular to tube direction)
+	const innerTipRotation = useMemo(() => {
+		const quaternion = new THREE.Quaternion();
+		quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), innerTangent);
+		return new THREE.Euler().setFromQuaternion(quaternion);
+	}, [innerTangent]);
+
+	const outerTipRotation = useMemo(() => {
+		const quaternion = new THREE.Quaternion();
+		const tangent = outerTangent || new THREE.Vector3(1, 0, 0);
+		quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tangent);
+		return new THREE.Euler().setFromQuaternion(quaternion);
+	}, [outerTangent]);
+
+	// Tip positions
+	const innerTipPos = useMemo(() => innerPosition.clone(), [innerPosition]);
+	const outerTipPos = useMemo(() => outerPosition?.clone() || new THREE.Vector3(), [outerPosition]);
+
+	// Suction particles geometry for aspiration effect
+	const suctionParticlesGeo = useMemo(() => {
+		const particleCount = 40;
+		const positions = new Float32Array(particleCount * 3);
+		for (let i = 0; i < particleCount; i++) {
+			const angle = (i / particleCount) * Math.PI * 2;
+			const radius = 0.02 + Math.random() * 0.06;
+			const zOffset = Math.random() * 0.3;
+			positions[i * 3] = Math.cos(angle) * radius;
+			positions[i * 3 + 1] = zOffset;
+			positions[i * 3 + 2] = Math.sin(angle) * radius;
+		}
+		const geo = new THREE.BufferGeometry();
+		geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+		return { geo, positions };
+	}, []);
+
+	// Animate deployment and suction effects
 	useFrame((state) => {
-		if (tipGlowRef.current) {
-			tipGlowRef.current.intensity = 5 + Math.sin(state.clock.elapsedTime * 3) * 2;
+		const time = state.clock.elapsedTime;
+
+		// Animate deployment ring - expanding pulse when inner catheter extends
+		if (isDeploying && deployRingRef.current) {
+			const pulse = 1 + Math.sin(time * 6) * 0.3;
+			deployRingRef.current.scale.setScalar(pulse);
+		}
+
+		// Animate deployment glow
+		if (isDeploying && deployGlowRef.current) {
+			const glow = 0.6 + Math.sin(time * 4) * 0.4;
+			(deployGlowRef.current.material as THREE.MeshBasicMaterial).opacity = glow;
+		}
+
+		if (!isAspirating) return;
+
+		// Animate suction ring - pulsing
+		if (suctionRingRef.current) {
+			const pulse = 0.8 + Math.sin(time * 8) * 0.2;
+			suctionRingRef.current.scale.setScalar(pulse);
+		}
+
+		// Animate suction particles - spiral inward
+		if (suctionParticlesRef.current) {
+			const posAttr = suctionParticlesRef.current.geometry.attributes.position;
+			for (let i = 0; i < 40; i++) {
+				let x = suctionParticlesGeo.positions[i * 3];
+				let y = suctionParticlesGeo.positions[i * 3 + 1];
+				let z = suctionParticlesGeo.positions[i * 3 + 2];
+
+				// Spiral inward and upward (toward catheter)
+				const angle = Math.atan2(z, x);
+				const radius = Math.sqrt(x * x + z * z);
+				const newAngle = angle + 0.15;
+				const newRadius = Math.max(0.005, radius - 0.003);
+				y -= 0.015; // Move toward catheter tip
+
+				// Reset when too close or past tip
+				if (newRadius < 0.01 || y < -0.05) {
+					const resetAngle = Math.random() * Math.PI * 2;
+					const resetRadius = 0.04 + Math.random() * 0.05;
+					x = Math.cos(resetAngle) * resetRadius;
+					z = Math.sin(resetAngle) * resetRadius;
+					y = 0.25 + Math.random() * 0.1;
+				} else {
+					x = Math.cos(newAngle) * newRadius;
+					z = Math.sin(newAngle) * newRadius;
+				}
+
+				suctionParticlesGeo.positions[i * 3] = x;
+				suctionParticlesGeo.positions[i * 3 + 1] = y;
+				suctionParticlesGeo.positions[i * 3 + 2] = z;
+
+				posAttr.setXYZ(i, x, y, z);
+			}
+			posAttr.needsUpdate = true;
 		}
 	});
 
-	if (!catheterGeometry || !guidewireGeometry || !tipGeometry) return null;
-
-	// Calculate rotation to align tip with catheter direction
-	const tipRotation = useMemo(() => {
-		const quaternion = new THREE.Quaternion();
-		// Default lathe points up (Y axis), we need to point along tangent
-		const defaultDir = new THREE.Vector3(0, 1, 0);
-		quaternion.setFromUnitVectors(defaultDir, tangent);
-		const euler = new THREE.Euler().setFromQuaternion(quaternion);
-		return euler;
-	}, [tangent]);
+	if (!outerCatheterGeo || !innerCatheterGeo || !lumenGeo) return null;
 
 	return (
 		<group>
-			{/* Main catheter body */}
-			<mesh geometry={catheterGeometry}>
-				<meshPhysicalMaterial
-					color="#e8e8e8"
-					metalness={0.85}
-					roughness={0.15}
-					clearcoat={1}
-					envMapIntensity={1.2}
-				/>
-			</mesh>
-
-			{/* Guidewire */}
-			<mesh geometry={guidewireGeometry}>
+			{/* Inner lumen - dark interior */}
+			<mesh geometry={lumenGeo}>
 				<meshStandardMaterial
-					color="#ffd700"
-					emissive="#cc9900"
-					emissiveIntensity={0.2}
-					metalness={0.8}
-					roughness={0.25}
+					color="#1a1a2a"
+					roughness={0.9}
+					metalness={0}
+					side={THREE.BackSide}
 				/>
 			</mesh>
 
-			{/* Smooth rounded tip - integrated with tube */}
-			<mesh geometry={tipGeometry} position={position} rotation={tipRotation}>
+			{/* Outer catheter - semi-transparent milky white polymer */}
+			<mesh geometry={outerCatheterGeo}>
 				<meshPhysicalMaterial
-					color="#e8e8e8"
-					metalness={0.85}
-					roughness={0.15}
-					clearcoat={1}
-					envMapIntensity={1.2}
+					color="#f0f0f5"
+					roughness={0.3}
+					metalness={0}
+					transmission={0.4}
+					thickness={0.5}
+					ior={1.4}
+					transparent
+					opacity={0.85}
+					clearcoat={0.3}
+					clearcoatRoughness={0.2}
 				/>
 			</mesh>
 
-			{/* Tip glow effect - subtle ring at opening */}
-			<group position={position}>
-				{/* Inner glow ring at tip opening */}
-				<mesh rotation={tipRotation}>
-					<torusGeometry args={[0.18, 0.03, 8, 24]} />
-					<meshBasicMaterial color="#00ffcc" transparent opacity={0.6} />
-				</mesh>
-				{/* Subtle outer glow */}
-				<mesh rotation={tipRotation}>
-					<torusGeometry args={[0.22, 0.05, 8, 24]} />
-					<meshBasicMaterial color="#00ffcc" transparent opacity={0.2} />
-				</mesh>
-				{/* Point light for glow effect */}
-				<pointLight
-					ref={tipGlowRef}
-					color="#00ffcc"
-					intensity={6}
-					distance={2}
-					decay={2}
+			{/* Inner catheter - slightly more opaque */}
+			<mesh geometry={innerCatheterGeo}>
+				<meshPhysicalMaterial
+					color="#e8e8f0"
+					roughness={0.25}
+					metalness={0}
+					transmission={0.3}
+					thickness={0.3}
+					ior={1.45}
+					transparent
+					opacity={0.9}
+					clearcoat={0.4}
+					clearcoatRoughness={0.15}
 				/>
-			</group>
+			</mesh>
+
+			{/* Outer catheter tip ring - flat annulus */}
+			<mesh position={outerTipPos} rotation={outerTipRotation}>
+				<ringGeometry args={[INNER_RADIUS + 0.01, OUTER_RADIUS, 32]} />
+				<meshPhysicalMaterial
+					color="#f0f0f5"
+					roughness={0.3}
+					metalness={0}
+					transparent
+					opacity={0.9}
+					side={THREE.DoubleSide}
+				/>
+			</mesh>
+
+			{/* Inner catheter tip ring - flat annulus */}
+			<mesh position={innerTipPos} rotation={innerTipRotation}>
+				<ringGeometry args={[INNER_RADIUS - INNER_WALL, INNER_RADIUS, 32]} />
+				<meshPhysicalMaterial
+					color="#e8e8f0"
+					roughness={0.25}
+					metalness={0}
+					transparent
+					opacity={0.95}
+					side={THREE.DoubleSide}
+				/>
+			</mesh>
+
+			{/* Deployment effects - inner catheter extending beyond outer */}
+			{isDeploying && (
+				<>
+					{/* Deployment light at inner tip */}
+					<pointLight
+						position={innerTipPos}
+						color="#ffaa00"
+						intensity={6}
+						distance={1.0}
+						decay={2}
+					/>
+
+					{/* Pulsing deployment ring */}
+					<group position={innerTipPos} rotation={innerTipRotation}>
+						<mesh ref={deployRingRef}>
+							<torusGeometry args={[INNER_RADIUS * 0.9, 0.008, 8, 32]} />
+							<meshBasicMaterial color="#ffcc00" transparent opacity={0.9} />
+						</mesh>
+					</group>
+
+					{/* Outer glow showing extension */}
+					<mesh ref={deployGlowRef} position={innerTipPos}>
+						<sphereGeometry args={[INNER_RADIUS * 0.8, 16, 16]} />
+						<meshBasicMaterial color="#ffaa00" transparent opacity={0.6} />
+					</mesh>
+
+					{/* Trail effect from outer tip to inner tip */}
+					<pointLight
+						position={outerTipPos}
+						color="#ffdd44"
+						intensity={3}
+						distance={0.8}
+						decay={2}
+					/>
+				</>
+			)}
+
+			{/* Aspiration effects when active */}
+			{isAspirating && (
+				<>
+					{/* Main suction light */}
+					<pointLight
+						position={innerTipPos}
+						color="#00ddff"
+						intensity={8}
+						distance={1.2}
+						decay={2}
+					/>
+
+					{/* Pulsing suction ring at tip */}
+					<group position={innerTipPos} rotation={innerTipRotation}>
+						<mesh ref={suctionRingRef}>
+							<torusGeometry args={[INNER_RADIUS * 0.7, 0.006, 8, 32]} />
+							<meshBasicMaterial color="#00ffff" transparent opacity={0.8} />
+						</mesh>
+					</group>
+
+					{/* Suction particles spiraling into catheter */}
+					<group position={innerTipPos} rotation={innerTipRotation}>
+						<points ref={suctionParticlesRef} geometry={suctionParticlesGeo.geo}>
+							<pointsMaterial
+								color="#00eeff"
+								size={0.012}
+								transparent
+								opacity={0.7}
+								sizeAttenuation
+							/>
+						</points>
+					</group>
+
+					{/* Inner glow effect */}
+					<mesh position={innerTipPos}>
+						<sphereGeometry args={[INNER_RADIUS * 0.5, 16, 16]} />
+						<meshBasicMaterial color="#00ccff" transparent opacity={0.3} />
+					</mesh>
+				</>
+			)}
 		</group>
 	);
 }
@@ -1010,22 +1220,32 @@ void main() {
 `;
 
 // Custom dissolve material component
-function DissolveClotMaterial({ progress, isAspirating }: { progress: number; isAspirating: boolean }) {
+function DissolveClotMaterial({
+	progress,
+	isAspirating,
+	catheterDirection
+}: {
+	progress: number;
+	isAspirating: boolean;
+	catheterDirection: THREE.Vector3;
+}) {
 	const materialRef = useRef<THREE.ShaderMaterial>(null);
 
 	const uniforms = useMemo(() => ({
 		uProgress: { value: 0 },
-		uEdgeWidth: { value: 0.12 },
-		uEdgeColor: { value: new THREE.Color("#cc8844") }, // Orange/amber edge glow
+		uEdgeWidth: { value: 0.15 },
+		uEdgeColor: { value: new THREE.Color("#ff6600") }, // Bright orange edge glow
 		uBaseColor: { value: new THREE.Color("#2a1515") }, // Dark brown/maroon base
 		uTime: { value: 0 },
-		uDissolveDirection: { value: new THREE.Vector3(1, 0, 0) },
+		uDissolveDirection: { value: catheterDirection.clone() },
 	}), []);
 
 	useFrame((state) => {
 		if (materialRef.current) {
 			materialRef.current.uniforms.uProgress.value = isAspirating ? progress : 0;
 			materialRef.current.uniforms.uTime.value = state.clock.elapsedTime;
+			// Update direction dynamically
+			materialRef.current.uniforms.uDissolveDirection.value.copy(catheterDirection);
 		}
 	});
 
@@ -1062,36 +1282,38 @@ interface ClotProps {
 	catheterTipPosition: THREE.Vector3;
 }
 
-// Aspirated particles - small fragments being sucked into catheter during dissolution
+// Aspirated particles - clot fragments being sucked into catheter lumen
 function AspiratedParticles({
 	clotPosition,
 	catheterTipPosition,
+	catheterDirection,
 	aspirationProgress,
 	isAspirating
 }: {
 	clotPosition: THREE.Vector3;
 	catheterTipPosition: THREE.Vector3;
+	catheterDirection: THREE.Vector3;
 	aspirationProgress: number;
 	isAspirating: boolean;
 }) {
 	const particlesRef = useRef<THREE.InstancedMesh>(null);
-	const particleCount = 80;
+	const particleCount = 60;
 	const dummy = useMemo(() => new THREE.Object3D(), []);
 
-	// Organic irregular fragment geometry
+	// Organic irregular fragment geometry - larger chunks
 	const geometry = useMemo(() => {
-		const geo = new THREE.IcosahedronGeometry(1, 0);
+		const geo = new THREE.IcosahedronGeometry(1, 1);
 		const pos = geo.attributes.position;
 		for (let i = 0; i < pos.count; i++) {
-			pos.setX(i, pos.getX(i) * (0.7 + Math.random() * 0.6));
-			pos.setY(i, pos.getY(i) * (0.5 + Math.random() * 0.5));
-			pos.setZ(i, pos.getZ(i) * (0.7 + Math.random() * 0.6));
+			pos.setX(i, pos.getX(i) * (0.6 + Math.random() * 0.8));
+			pos.setY(i, pos.getY(i) * (0.4 + Math.random() * 0.6));
+			pos.setZ(i, pos.getZ(i) * (0.6 + Math.random() * 0.8));
 		}
 		geo.computeVertexNormals();
 		return geo;
 	}, []);
 
-	// Generate particle data - distributed over time
+	// Generate particle data - chunks of clot being aspirated
 	const particleData = useMemo(() => {
 		return Array.from({ length: particleCount }, (_, i) => {
 			const seed = i * 0.618033988749;
@@ -1099,25 +1321,23 @@ function AspiratedParticles({
 			const seed3 = ((i + 200) * 0.577) % 1;
 			const seed4 = ((i + 300) * 0.732) % 1;
 
-			// Spawn time distributed across dissolution - continuous stream
-			const spawnTime = (i / particleCount) * 0.85;
+			// Spawn time distributed across aspiration
+			const spawnTime = (i / particleCount) * 0.80;
 
 			return {
-				// Start on clot surface - spherical distribution
-				theta: seed * Math.PI * 2,
-				phi: seed2 * Math.PI,
-				surfaceRadius: 0.08 + seed3 * 0.08,
-				// Varied sizes - mix of small debris and larger chunks
-				size: seed4 < 0.2 ? (0.03 + seed3 * 0.04) : (0.012 + seed2 * 0.018),
-				// When this particle appears
+				// Start position - facing catheter side of clot
+				theta: (seed * 0.6 + 0.2) * Math.PI * 2, // Mostly facing catheter
+				phi: seed2 * Math.PI * 0.8 + Math.PI * 0.1,
+				surfaceRadius: 0.06 + seed3 * 0.10,
+				// Larger chunks - actual clot fragments
+				size: 0.025 + seed4 * 0.035,
 				spawnTime,
-				// Particle lifetime (how long to animate)
-				lifetime: 0.15 + seed3 * 0.12,
-				// Spiral properties
-				spiralSpeed: 3 + seed2 * 4,
-				spiralRadius: 0.05 + seed3 * 0.08,
-				// Rotation
-				rotationSpeed: 4 + seed * 5,
+				// Slower travel - dramatic suction
+				lifetime: 0.20 + seed3 * 0.15,
+				// Tighter spiral into catheter opening
+				spiralSpeed: 6 + seed2 * 6,
+				spiralRadius: 0.03 + seed3 * 0.04,
+				rotationSpeed: 8 + seed * 8,
 				rotationOffset: seed * Math.PI * 2,
 			};
 		});
@@ -1129,47 +1349,54 @@ function AspiratedParticles({
 
 		for (let i = 0; i < particleCount; i++) {
 			const data = particleData[i];
-
-			// Calculate this particle's local progress
-			// Particle appears at spawnTime and takes lifetime to reach catheter
 			const localProgress = (aspirationProgress - data.spawnTime) / data.lifetime;
 
 			if (localProgress <= 0 || localProgress >= 1) {
 				dummy.scale.setScalar(0);
 			} else {
-				// Start position on clot surface
+				// Start position on clot surface facing catheter
 				const startPos = new THREE.Vector3(
 					clotPosition.x + Math.sin(data.phi) * Math.cos(data.theta) * data.surfaceRadius,
 					clotPosition.y + Math.sin(data.phi) * Math.sin(data.theta) * data.surfaceRadius,
 					clotPosition.z + Math.cos(data.phi) * data.surfaceRadius
 				);
 
-				// Accelerating movement toward catheter (faster at the end)
-				const eased = Math.pow(localProgress, 0.4);
-				const currentPos = startPos.clone().lerp(catheterTipPosition, eased);
+				// Accelerating suction - slow start, fast at catheter
+				const eased = Math.pow(localProgress, 0.3);
 
-				// Spiral motion - tightens as particle approaches catheter
-				const spiralPhase = time * data.spiralSpeed + data.rotationOffset + localProgress * Math.PI * 3;
-				const currentSpiralRadius = data.spiralRadius * (1 - eased) * (1 - eased);
+				// Target is INSIDE the catheter (past the tip)
+				const targetInsideCatheter = catheterTipPosition.clone()
+					.sub(catheterDirection.clone().multiplyScalar(0.15)); // Go into catheter
+
+				const currentPos = startPos.clone().lerp(targetInsideCatheter, eased);
+
+				// Tight spiral that funnels into catheter opening
+				const spiralPhase = time * data.spiralSpeed + data.rotationOffset + localProgress * Math.PI * 4;
+				const funnelFactor = Math.pow(1 - eased, 1.5); // Tightens dramatically
+				const currentSpiralRadius = data.spiralRadius * funnelFactor;
+
+				// Spiral perpendicular to catheter direction
 				currentPos.x += Math.cos(spiralPhase) * currentSpiralRadius;
 				currentPos.z += Math.sin(spiralPhase) * currentSpiralRadius;
 
 				dummy.position.copy(currentPos);
 
-				// Scale: fade in quickly, visible during travel, fade out at catheter
+				// Scale: visible throughout, shrink as entering catheter
 				let scale = data.size;
-				if (localProgress < 0.1) {
-					scale *= localProgress / 0.1; // Quick fade in
-				} else if (localProgress > 0.85) {
-					scale *= (1 - localProgress) / 0.15; // Fade out at catheter
+				if (localProgress < 0.08) {
+					scale *= localProgress / 0.08;
+				} else if (localProgress > 0.75) {
+					// Shrink as entering catheter lumen
+					scale *= Math.pow((1 - localProgress) / 0.25, 0.5);
 				}
 				dummy.scale.setScalar(scale);
 
-				// Tumbling rotation
+				// Tumbling rotation - faster as sucked in
+				const rotSpeed = data.rotationSpeed * (1 + eased * 2);
 				dummy.rotation.set(
-					time * data.rotationSpeed + data.rotationOffset,
-					time * data.rotationSpeed * 1.2,
-					time * data.rotationSpeed * 0.8
+					time * rotSpeed + data.rotationOffset,
+					time * rotSpeed * 1.3,
+					time * rotSpeed * 0.7
 				);
 			}
 
@@ -1185,10 +1412,10 @@ function AspiratedParticles({
 	return (
 		<instancedMesh ref={particlesRef} args={[geometry, undefined, particleCount]}>
 			<meshStandardMaterial
-				color="#4a2a1a"
-				emissive="#aa6633"
-				emissiveIntensity={0.4}
-				roughness={0.7}
+				color="#3d1a0a"
+				emissive="#8b4513"
+				emissiveIntensity={0.3}
+				roughness={0.8}
 				metalness={0}
 			/>
 		</instancedMesh>
@@ -1354,6 +1581,7 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 					<DissolveClotMaterial
 						progress={dissolveProgress}
 						isAspirating={aspiratingPhase || isComplete}
+						catheterDirection={new THREE.Vector3().subVectors(catheterTipPosition, position).normalize()}
 					/>
 				</mesh>
 			</group>
@@ -1362,6 +1590,7 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 			<AspiratedParticles
 				clotPosition={position}
 				catheterTipPosition={catheterTipPosition}
+				catheterDirection={new THREE.Vector3().subVectors(position, catheterTipPosition).normalize()}
 				aspirationProgress={dissolveProgress}
 				isAspirating={aspiratingPhase}
 			/>
@@ -1525,8 +1754,13 @@ function Scene({ progress }: { progress: number }) {
 				clotCleared={clotCleared}
 			/>
 
-			{/* Catheter */}
-			<Catheter path={catheterPath} progress={progress} />
+			{/* Catheter - deployment phase then aspiration phase */}
+			<Catheter
+				path={catheterPath}
+				progress={progress}
+				isDeploying={progress >= 0.40 && progress < 0.48}
+				isAspirating={progress >= 0.48 && progress < 0.75}
+			/>
 
 			{/* Clot - blocks the artery, sized to match vessel */}
 			<Clot
@@ -1551,6 +1785,7 @@ export function VascularScene3D() {
 	const t = useTranslations("Home.journey");
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [progress, setProgress] = useState(0);
+	const [displayProgress, setDisplayProgress] = useState(0);
 	const [isVisible, setIsVisible] = useState(false);
 	const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -1579,8 +1814,13 @@ export function VascularScene3D() {
 		const vh = window.innerHeight;
 		const scrolled = vh - rect.top;
 		const total = rect.height + vh * 0.5;
-		const p = Math.max(0, Math.min(1, scrolled / total));
-		requestAnimationFrame(() => setProgress(p));
+		const rawP = Math.max(0, Math.min(1, scrolled / total));
+		// Scale progress so animation (which ends at 0.75) completes at 100% scroll
+		const p = rawP * 0.75;
+		requestAnimationFrame(() => {
+			setProgress(p);
+			setDisplayProgress(rawP); // For UI display (0-100%)
+		});
 	}, [isVisible, prefersReducedMotion]);
 
 	useEffect(() => {
@@ -1604,7 +1844,7 @@ export function VascularScene3D() {
 		{ key: "impact", color: "primary" },
 	] as const;
 
-	const activePanel = Math.min(Math.floor(progress * panels.length), panels.length - 1);
+	const activePanel = Math.min(Math.floor(displayProgress * panels.length), panels.length - 1);
 
 	if (prefersReducedMotion) {
 		return (
@@ -1663,12 +1903,12 @@ export function VascularScene3D() {
 				{/* Progress */}
 				<div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4">
 					<div className="w-32 h-1 rounded-full bg-border overflow-hidden">
-						<div className="h-full bg-primary rounded-full transition-all" style={{ width: `${progress * 100}%` }} />
+						<div className="h-full bg-primary rounded-full transition-all" style={{ width: `${displayProgress * 100}%` }} />
 					</div>
-					<span className="text-xs text-text-muted font-mono">{Math.round(progress * 100)}%</span>
+					<span className="text-xs text-text-muted font-mono">{Math.round(displayProgress * 100)}%</span>
 				</div>
 
-				{progress < 0.05 && (
+				{displayProgress < 0.05 && (
 					<div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
 						<span className="text-xs text-text-subtle">{t("scrollHint")}</span>
 						<svg className="h-5 w-5 text-text-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24">

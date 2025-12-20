@@ -34,19 +34,19 @@ const teamMembers = {
 
 const colorStyles = {
 	primary: {
-		gradient: "from-primary/20",
+		ring: "group-hover:ring-primary/30",
 		dot: "bg-primary",
-		border: "group-hover:border-primary/30",
+		label: "text-primary",
 	},
 	secondary: {
-		gradient: "from-secondary/20",
+		ring: "group-hover:ring-secondary/30",
 		dot: "bg-secondary",
-		border: "group-hover:border-secondary/30",
+		label: "text-secondary",
 	},
 	accent: {
-		gradient: "from-accent/20",
+		ring: "group-hover:ring-accent/30",
 		dot: "bg-accent",
-		border: "group-hover:border-accent/30",
+		label: "text-accent",
 	},
 };
 
@@ -62,40 +62,33 @@ function TeamMemberCard({
 	color?: "primary" | "secondary" | "accent";
 }) {
 	return (
-		<div
-			className={`card card-accent-bottom group relative overflow-hidden ${colorStyles[color].border}`}
-		>
-			{/* Image */}
-			<div className="relative aspect-[4/5] overflow-hidden bg-bg-elevated">
+		<div className="group">
+			{/* Square Image with ring effect */}
+			<div
+				className={`relative aspect-square overflow-hidden rounded-xl bg-bg-elevated ring-1 ring-border transition-all duration-500 ${colorStyles[color].ring} group-hover:ring-2`}
+			>
 				<Image
 					src={image}
 					alt={t(`members.${memberKey}.name`)}
 					fill
-					className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+					className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
 				/>
-				{/* Gradient overlay */}
-				<div
-					className={`absolute inset-0 bg-gradient-to-t ${colorStyles[color].gradient} via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
-				/>
-				{/* Bottom fade */}
-				<div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg-card to-transparent" />
+				{/* Subtle gradient overlay on hover */}
+				<div className="absolute inset-0 bg-gradient-to-t from-bg/60 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 			</div>
 
-			{/* Content */}
-			<div className="p-5 sm:p-6">
-				<div className="flex items-center gap-2.5">
-					<span className={`h-2 w-2 rounded-full ${colorStyles[color].dot}`} />
-					<h3 className="font-display text-lg font-bold text-text sm:text-xl">
-						{t(`members.${memberKey}.name`)}
-					</h3>
-				</div>
-				<p className="mt-1 text-sm font-medium text-primary">
+			{/* Compact Content */}
+			<div className="mt-2.5">
+				<h3 className="font-display text-sm font-semibold text-text leading-tight">
+					{t(`members.${memberKey}.name`)}
+				</h3>
+				<p className={`mt-0.5 text-[11px] font-medium ${colorStyles[color].label}`}>
 					{t(`members.${memberKey}.role`)}
 				</p>
-				<p className="mt-3 text-sm text-text-muted leading-relaxed line-clamp-3">
+				<p className="mt-1.5 text-xs text-text-muted leading-relaxed">
 					{t(`members.${memberKey}.bio`)}
 				</p>
-				<p className="mt-3 text-xs text-text-subtle">
+				<p className="mt-1.5 text-[10px] text-text-subtle leading-relaxed">
 					{t(`members.${memberKey}.credentials`)}
 				</p>
 			</div>
@@ -108,49 +101,29 @@ function TeamSection({
 	members,
 	t,
 	color = "primary",
+	columns = "auto",
 }: {
 	title: string;
 	members: { key: string; image: string }[];
 	t: (key: string) => string;
 	color?: "primary" | "secondary" | "accent";
+	columns?: "auto" | 1 | 2 | 3 | 4;
 }) {
+	const gridCols = "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
+
 	return (
-		<div className="mt-16 first:mt-0 sm:mt-20">
-			{/* Section Header */}
-			<div className="mb-8 flex items-center gap-4 sm:mb-10">
-				<div
-					className={`h-px flex-1 bg-gradient-to-r from-transparent ${
-						color === "primary"
-							? "to-primary/20"
-							: color === "secondary"
-								? "to-secondary/20"
-								: "to-accent/20"
-					}`}
-				/>
-				<h3 className="font-display text-lg font-bold text-text sm:text-xl">
+		<div className="mt-12 first:mt-0 sm:mt-16">
+			{/* Centered Section Header */}
+			<div className="mb-6 flex items-center justify-center gap-4 sm:mb-8">
+				<div className="h-px w-12 bg-gradient-to-r from-transparent to-border sm:w-20" />
+				<h3 className="font-display text-xs font-semibold uppercase tracking-widest text-text-muted">
 					{title}
 				</h3>
-				<div
-					className={`h-px flex-1 bg-gradient-to-l from-transparent ${
-						color === "primary"
-							? "to-primary/20"
-							: color === "secondary"
-								? "to-secondary/20"
-								: "to-accent/20"
-					}`}
-				/>
+				<div className="h-px w-12 bg-gradient-to-l from-transparent to-border sm:w-20" />
 			</div>
 
-			{/* Members Grid */}
-			<div
-				className={`grid gap-4 sm:gap-6 ${
-					members.length === 1
-						? "mx-auto max-w-sm"
-						: members.length === 2
-							? "sm:grid-cols-2 max-w-3xl mx-auto"
-							: "sm:grid-cols-2 lg:grid-cols-3"
-				}`}
-			>
+			{/* Compact Grid */}
+			<div className={`grid gap-x-5 gap-y-8 sm:gap-x-6 sm:gap-y-10 ${gridCols}`}>
 				{members.map((member) => (
 					<TeamMemberCard
 						key={member.key}
@@ -172,59 +145,65 @@ export default async function TeamPage({ params }: Props) {
 
 	return (
 		<>
-			{/* Hero Section */}
-			<section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20">
+			{/* Compact Hero Section - Centered */}
+			<section className="relative overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-12">
 				{/* Background */}
 				<div className="absolute inset-0">
 					<div className="mesh-gradient" />
-					<div className="absolute inset-0 pattern-grid opacity-50" />
+					<div className="absolute inset-0 pattern-grid opacity-30" />
 				</div>
 
 				<div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<div className="max-w-3xl">
-						<div className="reveal badge">
+					<div className="mx-auto max-w-3xl text-center">
+						<div className="reveal badge badge-glow inline-flex">
+							<div className="live-dot" />
 							<span>{t("hero.tagline")}</span>
 						</div>
-						<h1 className="reveal reveal-delay-1 mt-6 font-display text-4xl font-bold leading-[1.1] text-text sm:text-5xl lg:text-6xl">
+						<h1 className="reveal reveal-delay-1 mt-4 font-display text-3xl font-bold leading-[1.15] text-text sm:text-4xl lg:text-5xl">
 							{t("hero.title")}{" "}
 							<span className="text-gradient">{t("hero.titleHighlight")}</span>
 						</h1>
-						<p className="reveal reveal-delay-2 mt-6 max-w-2xl text-base text-text-muted leading-relaxed sm:text-lg">
+						<p className="reveal reveal-delay-2 mx-auto mt-4 max-w-2xl text-sm text-text-muted leading-relaxed sm:text-base">
 							{t("hero.description")}
 						</p>
 					</div>
 				</div>
 			</section>
 
-			{/* Team Sections */}
-			<section className="relative py-16 sm:py-20">
-				<div className="section-divider absolute top-0 inset-x-0" />
-
+			{/* Team Grid - Condensed */}
+			<section className="relative pb-16 sm:pb-20">
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-					<TeamSection
-						title={t("sections.founders")}
-						members={teamMembers.founders}
-						t={t}
-						color="primary"
-					/>
-					<TeamSection
-						title={t("sections.clinicalAdvisors")}
-						members={teamMembers.clinicalAdvisors}
-						t={t}
-						color="secondary"
-					/>
-					<TeamSection
-						title={t("sections.advisors")}
-						members={teamMembers.advisors}
-						t={t}
-						color="accent"
-					/>
-					<TeamSection
-						title={t("sections.legal")}
-						members={teamMembers.legal}
-						t={t}
-						color="primary"
-					/>
+					{/* All team members in a more condensed layout */}
+					<div className="space-y-0">
+						<TeamSection
+							title={t("sections.founders")}
+							members={teamMembers.founders}
+							t={t}
+							color="primary"
+							columns={2}
+						/>
+						<TeamSection
+							title={t("sections.clinicalAdvisors")}
+							members={teamMembers.clinicalAdvisors}
+							t={t}
+							color="secondary"
+							columns={2}
+						/>
+						<TeamSection
+							title={t("sections.advisors")}
+							members={teamMembers.advisors}
+							t={t}
+							color="accent"
+							columns={2}
+						/>
+						<TeamSection
+							title={t("sections.legal")}
+							members={teamMembers.legal}
+							t={t}
+							color="primary"
+							columns={1}
+						/>
+					</div>
 				</div>
 			</section>
 		</>
