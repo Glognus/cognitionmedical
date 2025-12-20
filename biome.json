@@ -17,19 +17,20 @@
 				"noImportantStyles": "off"
 			},
 			"a11y": {
-				"noSvgWithoutTitle": "warn"
+				"noSvgWithoutTitle": "error"
 			},
 			"style": {
-				"noNonNullAssertion": "warn"
+				"noNonNullAssertion": "error"
 			},
 			"security": {
-				"noDangerouslySetInnerHtml": "warn"
+				"noDangerouslySetInnerHtml": "error"
 			},
 			"correctness": {
-				"noUnusedFunctionParameters": "warn"
+				"noUnusedFunctionParameters": "error",
+				"useExhaustiveDependencies": "error"
 			},
 			"suspicious": {
-				"noArrayIndexKey": "warn"
+				"noArrayIndexKey": "error"
 			}
 		}
 	},

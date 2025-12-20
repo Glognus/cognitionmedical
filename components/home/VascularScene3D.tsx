@@ -1609,12 +1609,9 @@ function Clot({
 	const mainRef = useRef<THREE.Group>(null);
 	const clotMeshRef = useRef<THREE.Mesh>(null);
 
-	// Get clot position and tangent from path
-	const { position, tangent } = useMemo(() => {
-		return {
-			position: path.getPoint(tPosition),
-			tangent: path.getTangent(tPosition),
-		};
+	// Get clot position from path
+	const position = useMemo(() => {
+		return path.getPoint(tPosition);
 	}, [path, tPosition]);
 
 	// Generate clot geometry
