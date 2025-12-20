@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useEffect, useRef, useState } from "react";
 
 // Dynamically import 3D scene to avoid SSR issues with Three.js
 const VascularScene3D = dynamic(
@@ -25,6 +26,27 @@ export function Hero() {
 	const t = useTranslations("Home.hero");
 	const pathname = usePathname();
 	const locale = pathname.split("/")[1] || "en";
+	const [shouldLoad3D, setShouldLoad3D] = useState(false);
+	const triggerRef = useRef<HTMLDivElement>(null);
+
+	// Load Three.js only when user scrolls near the 3D section
+	useEffect(() => {
+		const trigger = triggerRef.current;
+		if (!trigger) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0].isIntersecting) {
+					setShouldLoad3D(true);
+					observer.disconnect();
+				}
+			},
+			{ rootMargin: "200px" }, // Start loading 200px before visible
+		);
+
+		observer.observe(trigger);
+		return () => observer.disconnect();
+	}, []);
 
 	return (
 		<>
@@ -170,8 +192,11 @@ export function Hero() {
 				</div>
 			</section>
 
-			{/* 3D Vascular Journey - Scroll-based animation */}
-			<VascularScene3D />
+			{/* Trigger point for lazy loading 3D scene */}
+			<div ref={triggerRef} className="h-1" aria-hidden="true" />
+
+			{/* 3D Vascular Journey - Scroll-based animation (lazy loaded) */}
+			{shouldLoad3D && <VascularScene3D />}
 		</>
 	);
 }
