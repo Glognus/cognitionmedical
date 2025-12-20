@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export function Footer() {
 	const t = useTranslations("Footer");
@@ -50,25 +50,10 @@ export function Footer() {
 										aria-hidden="true"
 									>
 										<circle cx="12" cy="4" r="2" className="fill-primary" />
-										<circle
-											cx="6"
-											cy="12"
-											r="1.5"
-											className="fill-secondary"
-										/>
-										<circle
-											cx="18"
-											cy="12"
-											r="1.5"
-											className="fill-secondary"
-										/>
+										<circle cx="6" cy="12" r="1.5" className="fill-secondary" />
+										<circle cx="18" cy="12" r="1.5" className="fill-secondary" />
 										<circle cx="12" cy="20" r="2" className="fill-accent" />
-										<circle
-											cx="12"
-											cy="12"
-											r="2.5"
-											className="fill-primary/80"
-										/>
+										<circle cx="12" cy="12" r="2.5" className="fill-primary/80" />
 										<path
 											d="M12 6.5v3M12 14.5v3M8 11l1.5 1M14.5 12l1.5-1M8 13l1.5-1M14.5 12l1.5 1"
 											className="stroke-text-subtle"
@@ -168,8 +153,7 @@ export function Footer() {
 				{/* Bottom Bar */}
 				<div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
 					<p className="text-xs text-text-subtle">
-						&copy; {new Date().getFullYear()} Cognition Medical Corp.{" "}
-						{t("rights")}
+						&copy; {new Date().getFullYear()} Cognition Medical Corp. {t("rights")}
 					</p>
 					<div className="flex items-center gap-6">
 						<Link

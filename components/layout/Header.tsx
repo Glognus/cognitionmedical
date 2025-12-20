@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
@@ -56,7 +56,7 @@ export function Header() {
 			<header
 				className={cn(
 					"fixed top-0 left-0 right-0 z-50 transition-all duration-500",
-					isScrolled ? "glass-strong py-3" : "py-5"
+					isScrolled ? "glass-strong py-3" : "py-5",
 				)}
 			>
 				<div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -118,7 +118,7 @@ export function Header() {
 											"relative px-4 py-2 text-sm font-medium transition-all duration-300 rounded-full",
 											isActive(item.href)
 												? "text-bg bg-primary"
-												: "text-text-muted hover:text-text hover:bg-bg-hover"
+												: "text-text-muted hover:text-text hover:bg-bg-hover",
 										)}
 									>
 										{item.label}
@@ -140,10 +140,7 @@ export function Header() {
 							</div>
 
 							{/* CTA Button - Desktop */}
-							<Link
-								href={`/${locale}/contact`}
-								className="btn btn-primary btn-sm hidden lg:flex"
-							>
+							<Link href={`/${locale}/contact`} className="btn btn-primary btn-sm hidden lg:flex">
 								<span>{t("getInTouch")}</span>
 								<svg
 									className="h-4 w-4"
@@ -167,9 +164,7 @@ export function Header() {
 								onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
 								className={cn(
 									"relative z-50 flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-xl border transition-all duration-300 lg:hidden",
-									isMobileMenuOpen
-										? "border-primary/30 bg-bg-card"
-										: "border-border bg-bg-card/80"
+									isMobileMenuOpen ? "border-primary/30 bg-bg-card" : "border-border bg-bg-card/80",
 								)}
 								aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
 								aria-expanded={isMobileMenuOpen}
@@ -177,19 +172,19 @@ export function Header() {
 								<span
 									className={cn(
 										"h-0.5 w-5 rounded-full bg-text transition-all duration-300",
-										isMobileMenuOpen && "translate-y-2 rotate-45"
+										isMobileMenuOpen && "translate-y-2 rotate-45",
 									)}
 								/>
 								<span
 									className={cn(
 										"h-0.5 w-5 rounded-full bg-text transition-all duration-300",
-										isMobileMenuOpen && "opacity-0 scale-0"
+										isMobileMenuOpen && "opacity-0 scale-0",
 									)}
 								/>
 								<span
 									className={cn(
 										"h-0.5 w-5 rounded-full bg-text transition-all duration-300",
-										isMobileMenuOpen && "-translate-y-2 -rotate-45"
+										isMobileMenuOpen && "-translate-y-2 -rotate-45",
 									)}
 								/>
 							</button>
@@ -202,9 +197,7 @@ export function Header() {
 			<div
 				className={cn(
 					"fixed inset-0 z-40 lg:hidden transition-all duration-500",
-					isMobileMenuOpen
-						? "visible opacity-100"
-						: "invisible opacity-0 pointer-events-none"
+					isMobileMenuOpen ? "visible opacity-100" : "invisible opacity-0 pointer-events-none",
 				)}
 			>
 				{/* Backdrop */}
@@ -227,17 +220,11 @@ export function Header() {
 										onClick={() => setIsMobileMenuOpen(false)}
 										className={cn(
 											"group flex items-center gap-4 rounded-2xl px-4 py-4 transition-all duration-300",
-											isActive(item.href)
-												? "bg-primary/10"
-												: "hover:bg-bg-card"
+											isActive(item.href) ? "bg-primary/10" : "hover:bg-bg-card",
 										)}
 										style={{
-											transitionDelay: isMobileMenuOpen
-												? `${index * 50}ms`
-												: "0ms",
-											transform: isMobileMenuOpen
-												? "translateX(0)"
-												: "translateX(-20px)",
+											transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : "0ms",
+											transform: isMobileMenuOpen ? "translateX(0)" : "translateX(-20px)",
 											opacity: isMobileMenuOpen ? 1 : 0,
 										}}
 									>
@@ -245,7 +232,7 @@ export function Header() {
 										<span
 											className={cn(
 												"h-2 w-2 rounded-full transition-colors",
-												isActive(item.href) ? "bg-primary" : "bg-border"
+												isActive(item.href) ? "bg-primary" : "bg-border",
 											)}
 										/>
 										<span
@@ -253,7 +240,7 @@ export function Header() {
 												"font-display text-2xl font-semibold transition-colors",
 												isActive(item.href)
 													? "text-primary"
-													: "text-text-muted group-hover:text-text"
+													: "text-text-muted group-hover:text-text",
 											)}
 										>
 											{item.label}
@@ -269,9 +256,7 @@ export function Header() {
 						className="space-y-4 border-t border-border pt-6"
 						style={{
 							transitionDelay: isMobileMenuOpen ? "300ms" : "0ms",
-							transform: isMobileMenuOpen
-								? "translateY(0)"
-								: "translateY(20px)",
+							transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
 							opacity: isMobileMenuOpen ? 1 : 0,
 							transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
 						}}

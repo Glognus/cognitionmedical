@@ -1,4 +1,4 @@
-import { Outfit, DM_Sans } from "next/font/google";
+import { DM_Sans, Outfit } from "next/font/google";
 
 export const outfit = Outfit({
 	subsets: ["latin"],

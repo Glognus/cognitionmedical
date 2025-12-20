@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
-import { outfit, dmSans } from "@/lib/fonts";
-import { routing } from "@/i18n/routing";
-import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { Header } from "@/components/layout/Header";
+import { routing } from "@/i18n/routing";
+import { dmSans, outfit } from "@/lib/fonts";
 import { ThemeProvider } from "@/lib/theme";
 import "@/app/globals.css";
 
@@ -88,9 +88,7 @@ export default async function LocaleLayout({ children, params }: Props) {
 			suppressHydrationWarning
 		>
 			<head>
-				<script
-					dangerouslySetInnerHTML={{ __html: themeScript }}
-				/>
+				<script dangerouslySetInnerHTML={{ __html: themeScript }} />
 			</head>
 			<body className="min-h-screen bg-bg antialiased">
 				<NextIntlClientProvider messages={messages}>

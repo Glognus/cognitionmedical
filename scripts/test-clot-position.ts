@@ -8,33 +8,33 @@ import { generateVesselGeometry } from "../components/home/SDFVesselGen";
 
 // Recreate the exact paths from VascularScene3D.tsx
 const createLeftBranchPath = () => {
-    return new THREE.CatmullRomCurve3([
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(-0.2, 0.4, 0.1),
-        new THREE.Vector3(-0.5, 1.0, 0.25),
-        new THREE.Vector3(-0.85, 1.6, 0.42),
-        new THREE.Vector3(-1.2, 2.2, 0.58),
-        new THREE.Vector3(-1.5, 2.8, 0.72),
-        new THREE.Vector3(-1.8, 3.5, 0.9),
-        new THREE.Vector3(-2.1, 4.2, 1.1),
-    ]);
+	return new THREE.CatmullRomCurve3([
+		new THREE.Vector3(0, 0, 0),
+		new THREE.Vector3(-0.2, 0.4, 0.1),
+		new THREE.Vector3(-0.5, 1.0, 0.25),
+		new THREE.Vector3(-0.85, 1.6, 0.42),
+		new THREE.Vector3(-1.2, 2.2, 0.58),
+		new THREE.Vector3(-1.5, 2.8, 0.72),
+		new THREE.Vector3(-1.8, 3.5, 0.9),
+		new THREE.Vector3(-2.1, 4.2, 1.1),
+	]);
 };
 
 const createBloodFlowLeftPath = () => {
-    // Main vessel → Left branch (continuous flow)
-    return new THREE.CatmullRomCurve3([
-        new THREE.Vector3(0, -6, 0),
-        new THREE.Vector3(0.03, -4, 0.02),
-        new THREE.Vector3(0.05, -2, 0.03),
-        new THREE.Vector3(0.04, -1, 0.02),
-        new THREE.Vector3(0, 0, 0),
-        // Continue into left branch
-        new THREE.Vector3(-0.2, 0.4, 0.1),
-        new THREE.Vector3(-0.5, 1.0, 0.25),
-        new THREE.Vector3(-0.85, 1.6, 0.42),
-        new THREE.Vector3(-1.2, 2.2, 0.58),
-        new THREE.Vector3(-1.5, 2.8, 0.72),
-    ]);
+	// Main vessel → Left branch (continuous flow)
+	return new THREE.CatmullRomCurve3([
+		new THREE.Vector3(0, -6, 0),
+		new THREE.Vector3(0.03, -4, 0.02),
+		new THREE.Vector3(0.05, -2, 0.03),
+		new THREE.Vector3(0.04, -1, 0.02),
+		new THREE.Vector3(0, 0, 0),
+		// Continue into left branch
+		new THREE.Vector3(-0.2, 0.4, 0.1),
+		new THREE.Vector3(-0.5, 1.0, 0.25),
+		new THREE.Vector3(-0.85, 1.6, 0.42),
+		new THREE.Vector3(-1.2, 2.2, 0.58),
+		new THREE.Vector3(-1.5, 2.8, 0.72),
+	]);
 };
 
 // Clot parameters from VascularScene3D.tsx
@@ -49,8 +49,12 @@ const clotPosition = bloodFlowLeftPath.getPoint(clotTPosition);
 const clotTangent = bloodFlowLeftPath.getTangent(clotTPosition);
 
 console.log(`Clot t position: ${clotTPosition}`);
-console.log(`Clot 3D position: (${clotPosition.x.toFixed(3)}, ${clotPosition.y.toFixed(3)}, ${clotPosition.z.toFixed(3)})`);
-console.log(`Clot tangent: (${clotTangent.x.toFixed(3)}, ${clotTangent.y.toFixed(3)}, ${clotTangent.z.toFixed(3)})`);
+console.log(
+	`Clot 3D position: (${clotPosition.x.toFixed(3)}, ${clotPosition.y.toFixed(3)}, ${clotPosition.z.toFixed(3)})`,
+);
+console.log(
+	`Clot tangent: (${clotTangent.x.toFixed(3)}, ${clotTangent.y.toFixed(3)}, ${clotTangent.z.toFixed(3)})`,
+);
 console.log(`\nClot vessel radius used in code: ${clotVesselRadius}`);
 
 // Now let's understand which vessel this corresponds to
@@ -67,26 +71,30 @@ console.log(`\nAt t=${clotTPosition}, we're in the LEFT BRANCH`);
 // At t=0.85, we're near the end of the path (point 8-9 area)
 const leftBranchPath = createLeftBranchPath();
 const leftBranchEndPos = leftBranchPath.getPoint(1.0);
-console.log(`Left branch end position: (${leftBranchEndPos.x.toFixed(3)}, ${leftBranchEndPos.y.toFixed(3)}, ${leftBranchEndPos.z.toFixed(3)})`);
+console.log(
+	`Left branch end position: (${leftBranchEndPos.x.toFixed(3)}, ${leftBranchEndPos.y.toFixed(3)}, ${leftBranchEndPos.z.toFixed(3)})`,
+);
 
 // Compare clot position to left branch
 const leftBranchPoint85 = leftBranchPath.getPoint(0.7); // Approximate
-console.log(`Left branch at t=0.7: (${leftBranchPoint85.x.toFixed(3)}, ${leftBranchPoint85.y.toFixed(3)}, ${leftBranchPoint85.z.toFixed(3)})`);
+console.log(
+	`Left branch at t=0.7: (${leftBranchPoint85.x.toFixed(3)}, ${leftBranchPoint85.y.toFixed(3)}, ${leftBranchPoint85.z.toFixed(3)})`,
+);
 
 // Now measure the ACTUAL visual radius of the vessel at the clot position
 console.log("\n=== MEASURING ACTUAL VESSEL RADIUS ===\n");
 
 // Generate vessel geometry with just the left branch
-const leftBranchGeometry = generateVesselGeometry([
-    { path: leftBranchPath, radius: 0.16 }
-]);
+const leftBranchGeometry = generateVesselGeometry([{ path: leftBranchPath, radius: 0.16 }]);
 
 leftBranchGeometry.computeBoundingBox();
 const bbox = leftBranchGeometry.boundingBox!;
 const size = new THREE.Vector3();
 bbox.getSize(size);
 
-console.log(`Left branch bounding box: X=${size.x.toFixed(3)}, Y=${size.y.toFixed(3)}, Z=${size.z.toFixed(3)}`);
+console.log(
+	`Left branch bounding box: X=${size.x.toFixed(3)}, Y=${size.y.toFixed(3)}, Z=${size.z.toFixed(3)}`,
+);
 
 // The vessel is roughly cylindrical - X and Z give us diameter
 const estimatedVisualDiameter = (size.x + size.z) / 2;
@@ -110,20 +118,17 @@ let maxDistFromCenter = 0;
 let sampledPoints = 0;
 
 for (let i = 0; i < positions.count; i++) {
-    const y = positions.getY(i);
-    if (Math.abs(y - clotY) < tolerance) {
-        const x = positions.getX(i);
-        const z = positions.getZ(i);
-        // Distance from the path center line (approximately)
-        const distFromPath = Math.sqrt(
-            Math.pow(x - clotPosition.x, 2) +
-            Math.pow(z - clotPosition.z, 2)
-        );
-        if (distFromPath > maxDistFromCenter) {
-            maxDistFromCenter = distFromPath;
-        }
-        sampledPoints++;
-    }
+	const y = positions.getY(i);
+	if (Math.abs(y - clotY) < tolerance) {
+		const x = positions.getX(i);
+		const z = positions.getZ(i);
+		// Distance from the path center line (approximately)
+		const distFromPath = Math.sqrt((x - clotPosition.x) ** 2 + (z - clotPosition.z) ** 2);
+		if (distFromPath > maxDistFromCenter) {
+			maxDistFromCenter = distFromPath;
+		}
+		sampledPoints++;
+	}
 }
 
 console.log(`Sampled ${sampledPoints} vertices near clot Y position (${clotY.toFixed(3)})`);

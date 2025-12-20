@@ -1,17 +1,12 @@
 "use client";
 
-import { useRef, useMemo, useEffect, useState, useCallback, Suspense } from "react";
+import { Environment, Html, PerspectiveCamera, useProgress } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import {
-	Environment,
-	PerspectiveCamera,
-	useProgress,
-	Html,
-} from "@react-three/drei";
-import * as THREE from "three";
 import { useTranslations } from "next-intl";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import * as THREE from "three";
 import { cn } from "@/lib/utils";
-import { generateVesselGeometry, generateClotGeometryForVessel } from "./SDFVesselGen";
+import { generateClotGeometryForVessel, generateVesselGeometry } from "./SDFVesselGen";
 
 // ============================================
 // VESSEL PATH DEFINITIONS
@@ -145,8 +140,8 @@ function UnifiedVesselNetwork() {
 			{ path: mainPath, radius: 0.22 },
 			{ path: leftPath, radius: 0.16 },
 			{ path: rightPath, radius: 0.14 },
-			{ path: cerebralPath, radius: 0.10 },
-			{ path: continuationPath, radius: 0.09 }
+			{ path: cerebralPath, radius: 0.1 },
+			{ path: continuationPath, radius: 0.09 },
 		]);
 	}, []);
 
@@ -162,8 +157,8 @@ function UnifiedVesselNetwork() {
 			{ path: mainPath, radius: 0.22 - 0.04 },
 			{ path: leftPath, radius: 0.16 - 0.035 },
 			{ path: rightPath, radius: 0.14 - 0.035 },
-			{ path: cerebralPath, radius: 0.10 - 0.03 },
-			{ path: continuationPath, radius: 0.09 - 0.03 }
+			{ path: cerebralPath, radius: 0.1 - 0.03 },
+			{ path: continuationPath, radius: 0.09 - 0.03 },
 		]);
 	}, []);
 
@@ -171,12 +166,7 @@ function UnifiedVesselNetwork() {
 		<group>
 			{/* Inner lumen - dark interior visible through transparent walls */}
 			<mesh geometry={lumenGeometry}>
-				<meshStandardMaterial
-					color="#1a0000"
-					roughness={0.9}
-					metalness={0}
-					side={THREE.BackSide}
-				/>
+				<meshStandardMaterial color="#1a0000" roughness={0.9} metalness={0} side={THREE.BackSide} />
 			</mesh>
 			{/* Outer vessel wall - translucent organic tissue */}
 			<mesh geometry={mergedGeometry}>
@@ -197,12 +187,7 @@ function UnifiedVesselNetwork() {
 			</mesh>
 			{/* Subtle outer glow for depth */}
 			<mesh geometry={mergedGeometry} scale={1.02}>
-				<meshBasicMaterial
-					color="#ff3333"
-					transparent
-					opacity={0.08}
-					side={THREE.BackSide}
-				/>
+				<meshBasicMaterial color="#ff3333" transparent opacity={0.08} side={THREE.BackSide} />
 			</mesh>
 		</group>
 	);
@@ -229,15 +214,21 @@ function Catheter({ path, progress, isDeploying = false, isAspirating = false }:
 	// Catheter dimensions - scaled to match visual vessel size
 	// Visual vessel radius ≈ 0.16 * 2.35 = 0.376 (left branch)
 	// Catheter should be ~80% of visual vessel = 0.30
-	const OUTER_RADIUS = 0.30; // Outer catheter radius (80% of visual vessel)
+	const OUTER_RADIUS = 0.3; // Outer catheter radius (80% of visual vessel)
 	const INNER_RADIUS = 0.18; // Inner catheter radius
 	const INNER_WALL = 0.025; // Inner wall thickness
 
 	// Outer catheter stops at 40%, inner continues to full progress
-	const OUTER_STOP_PROGRESS = 0.40;
+	const OUTER_STOP_PROGRESS = 0.4;
 
 	const {
-		innerPosition, innerTangent, outerPosition, outerTangent, outerCatheterGeo, innerCatheterGeo, lumenGeo
+		innerPosition,
+		innerTangent,
+		outerPosition,
+		outerTangent,
+		outerCatheterGeo,
+		innerCatheterGeo,
+		lumenGeo,
 	} = useMemo(() => {
 		// Outer catheter progress (stops at 40%)
 		const outerT = Math.max(0.001, Math.min(OUTER_STOP_PROGRESS, progress));
@@ -265,11 +256,13 @@ function Catheter({ path, progress, isDeploying = false, isAspirating = false }:
 
 		for (let i = 1; i <= extensionSegments; i++) {
 			const extendDist = (i / extensionSegments) * extensionLength;
-			outerPoints.push(new THREE.Vector3(
-				startPoint.x - startTangent.x * extendDist,
-				startPoint.y - startTangent.y * extendDist,
-				startPoint.z - startTangent.z * extendDist
-			));
+			outerPoints.push(
+				new THREE.Vector3(
+					startPoint.x - startTangent.x * extendDist,
+					startPoint.y - startTangent.y * extendDist,
+					startPoint.z - startTangent.z * extendDist,
+				),
+			);
 		}
 
 		// Build INNER catheter path (continues to full progress)
@@ -282,17 +275,22 @@ function Catheter({ path, progress, isDeploying = false, isAspirating = false }:
 		// Extend inner catheter beyond path start too
 		for (let i = 1; i <= extensionSegments; i++) {
 			const extendDist = (i / extensionSegments) * extensionLength;
-			innerPoints.push(new THREE.Vector3(
-				startPoint.x - startTangent.x * extendDist,
-				startPoint.y - startTangent.y * extendDist,
-				startPoint.z - startTangent.z * extendDist
-			));
+			innerPoints.push(
+				new THREE.Vector3(
+					startPoint.x - startTangent.x * extendDist,
+					startPoint.y - startTangent.y * extendDist,
+					startPoint.z - startTangent.z * extendDist,
+				),
+			);
 		}
 
 		if (outerPoints.length < 2 || innerPoints.length < 2) {
 			return {
-				innerPosition: innerPos, innerTangent: innerTang,
-				outerCatheterGeo: null, innerCatheterGeo: null, lumenGeo: null
+				innerPosition: innerPos,
+				innerTangent: innerTang,
+				outerCatheterGeo: null,
+				innerCatheterGeo: null,
+				lumenGeo: null,
 			};
 		}
 
@@ -317,7 +315,7 @@ function Catheter({ path, progress, isDeploying = false, isAspirating = false }:
 			outerTangent: outerTang,
 			outerCatheterGeo: outerGeo,
 			innerCatheterGeo: innerGeo,
-			lumenGeo: lumen
+			lumenGeo: lumen,
 		};
 	}, [path, progress]);
 
@@ -352,7 +350,7 @@ function Catheter({ path, progress, isDeploying = false, isAspirating = false }:
 			positions[i * 3 + 2] = Math.sin(angle) * radius;
 		}
 		const geo = new THREE.BufferGeometry();
-		geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+		geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 		return { geo, positions };
 	}, []);
 
@@ -423,12 +421,7 @@ function Catheter({ path, progress, isDeploying = false, isAspirating = false }:
 		<group>
 			{/* Inner lumen - dark interior */}
 			<mesh geometry={lumenGeo}>
-				<meshStandardMaterial
-					color="#1a1a2a"
-					roughness={0.9}
-					metalness={0}
-					side={THREE.BackSide}
-				/>
+				<meshStandardMaterial color="#1a1a2a" roughness={0.9} metalness={0} side={THREE.BackSide} />
 			</mesh>
 
 			{/* Outer catheter - semi-transparent milky white polymer */}
@@ -608,13 +601,29 @@ interface BloodParticlesProps {
 }
 
 // Red Blood Cells - biconcave disc shape (main component)
-function RedBloodCells({ paths, count, clotWorldPosition, clotRadius, clotCleared, particleData, getRadialBounds }: {
+function RedBloodCells({
+	paths,
+	count,
+	clotWorldPosition,
+	clotRadius,
+	clotCleared,
+	particleData,
+	getRadialBounds,
+}: {
 	paths: THREE.CatmullRomCurve3[];
 	count: number;
 	clotWorldPosition?: THREE.Vector3;
 	clotRadius: number;
 	clotCleared: boolean;
-	particleData: Array<{ pathIndex: number; initialOffset: number; speed: number; radialFraction: number; radialAngle: number; wobbleAmount: number; stuckOffset: number }>;
+	particleData: Array<{
+		pathIndex: number;
+		initialOffset: number;
+		speed: number;
+		radialFraction: number;
+		radialAngle: number;
+		wobbleAmount: number;
+		stuckOffset: number;
+	}>;
 	getRadialBounds: (pathIndex: number, t: number) => { min: number; max: number };
 }) {
 	const meshRef = useRef<THREE.InstancedMesh>(null);
@@ -638,7 +647,9 @@ function RedBloodCells({ paths, count, clotWorldPosition, clotRadius, clotCleare
 	}, []);
 
 	// Store stuck positions for cells blocked by clot
-	const stuckPositions = useRef<Map<number, { pos: THREE.Vector3; jitter: THREE.Vector3 }>>(new Map());
+	const stuckPositions = useRef<Map<number, { pos: THREE.Vector3; jitter: THREE.Vector3 }>>(
+		new Map(),
+	);
 
 	useFrame((state) => {
 		if (!meshRef.current) return;
@@ -670,13 +681,13 @@ function RedBloodCells({ paths, count, clotWorldPosition, clotRadius, clotCleare
 			pos.z += radZ * effectiveRadius;
 
 			// Check collision with clot on FINAL position (after radial offset)
-			let isStuck = false;
+			let _isStuck = false;
 			if (clotWorldPosition && !clotCleared && data.pathIndex === 0) {
 				const distToClot = pos.distanceTo(clotWorldPosition);
 				const collisionRadius = clotRadius + 0.25; // Increased margin
 
 				if (distToClot < collisionRadius) {
-					isStuck = true;
+					_isStuck = true;
 					// Use cached stuck position or find one
 					if (!stuckPositions.current.has(i)) {
 						// Search backward along path for safe position
@@ -704,8 +715,8 @@ function RedBloodCells({ paths, count, clotWorldPosition, clotRadius, clotCleare
 							jitter: new THREE.Vector3(
 								(Math.random() - 0.5) * 0.015,
 								(Math.random() - 0.5) * 0.015,
-								(Math.random() - 0.5) * 0.015
-							)
+								(Math.random() - 0.5) * 0.015,
+							),
 						});
 					}
 					const stuck = stuckPositions.current.get(i)!;
@@ -747,18 +758,36 @@ function RedBloodCells({ paths, count, clotWorldPosition, clotRadius, clotCleare
 }
 
 // White Blood Cells - larger, spherical, rare
-function WhiteBloodCells({ paths, count, clotWorldPosition, clotRadius, clotCleared, particleData, getRadialBounds }: {
+function WhiteBloodCells({
+	paths,
+	count,
+	clotWorldPosition,
+	clotRadius,
+	clotCleared,
+	particleData,
+	getRadialBounds,
+}: {
 	paths: THREE.CatmullRomCurve3[];
 	count: number;
 	clotWorldPosition?: THREE.Vector3;
 	clotRadius: number;
 	clotCleared: boolean;
-	particleData: Array<{ pathIndex: number; initialOffset: number; speed: number; radialFraction: number; radialAngle: number; wobbleAmount: number; stuckOffset: number }>;
+	particleData: Array<{
+		pathIndex: number;
+		initialOffset: number;
+		speed: number;
+		radialFraction: number;
+		radialAngle: number;
+		wobbleAmount: number;
+		stuckOffset: number;
+	}>;
 	getRadialBounds: (pathIndex: number, t: number) => { min: number; max: number };
 }) {
 	const meshRef = useRef<THREE.InstancedMesh>(null);
 	const dummy = useMemo(() => new THREE.Object3D(), []);
-	const stuckPositions = useRef<Map<number, { pos: THREE.Vector3; jitter: THREE.Vector3 }>>(new Map());
+	const stuckPositions = useRef<Map<number, { pos: THREE.Vector3; jitter: THREE.Vector3 }>>(
+		new Map(),
+	);
 
 	useFrame((state) => {
 		if (!meshRef.current) return;
@@ -819,8 +848,8 @@ function WhiteBloodCells({ paths, count, clotWorldPosition, clotRadius, clotClea
 							jitter: new THREE.Vector3(
 								(Math.random() - 0.5) * 0.02,
 								(Math.random() - 0.5) * 0.02,
-								(Math.random() - 0.5) * 0.02
-							)
+								(Math.random() - 0.5) * 0.02,
+							),
 						});
 					}
 					const stuck = stuckPositions.current.get(i)!;
@@ -863,18 +892,36 @@ function WhiteBloodCells({ paths, count, clotWorldPosition, clotRadius, clotClea
 }
 
 // Platelets - tiny, irregular fragments
-function Platelets({ paths, count, clotWorldPosition, clotRadius, clotCleared, particleData, getRadialBounds }: {
+function Platelets({
+	paths,
+	count,
+	clotWorldPosition,
+	clotRadius,
+	clotCleared,
+	particleData,
+	getRadialBounds,
+}: {
 	paths: THREE.CatmullRomCurve3[];
 	count: number;
 	clotWorldPosition?: THREE.Vector3;
 	clotRadius: number;
 	clotCleared: boolean;
-	particleData: Array<{ pathIndex: number; initialOffset: number; speed: number; radialFraction: number; radialAngle: number; wobbleAmount: number; stuckOffset: number }>;
+	particleData: Array<{
+		pathIndex: number;
+		initialOffset: number;
+		speed: number;
+		radialFraction: number;
+		radialAngle: number;
+		wobbleAmount: number;
+		stuckOffset: number;
+	}>;
 	getRadialBounds: (pathIndex: number, t: number) => { min: number; max: number };
 }) {
 	const meshRef = useRef<THREE.InstancedMesh>(null);
 	const dummy = useMemo(() => new THREE.Object3D(), []);
-	const stuckPositions = useRef<Map<number, { pos: THREE.Vector3; jitter: THREE.Vector3 }>>(new Map());
+	const stuckPositions = useRef<Map<number, { pos: THREE.Vector3; jitter: THREE.Vector3 }>>(
+		new Map(),
+	);
 
 	// Irregular fragment geometry
 	const geometry = useMemo(() => {
@@ -949,8 +996,8 @@ function Platelets({ paths, count, clotWorldPosition, clotRadius, clotCleared, p
 							jitter: new THREE.Vector3(
 								(Math.random() - 0.5) * 0.01,
 								(Math.random() - 0.5) * 0.01,
-								(Math.random() - 0.5) * 0.01
-							)
+								(Math.random() - 0.5) * 0.01,
+							),
 						});
 					}
 					const stuck = stuckPositions.current.get(i)!;
@@ -971,7 +1018,7 @@ function Platelets({ paths, count, clotWorldPosition, clotRadius, clotCleared, p
 			dummy.rotation.set(
 				time * 2 + data.initialOffset * 10,
 				time * 3 + data.initialOffset * 15,
-				time * 1.5 + data.initialOffset * 8
+				time * 1.5 + data.initialOffset * 8,
 			);
 			dummy.updateMatrix();
 			meshRef.current.setMatrixAt(i, dummy.matrix);
@@ -994,23 +1041,32 @@ function Platelets({ paths, count, clotWorldPosition, clotRadius, clotCleared, p
 }
 
 // Main Blood Particles Component - combines all cell types
-function BloodParticles({ paths, count = 600, clotWorldPosition, clotRadius = 0.25, clotCleared = false }: BloodParticlesProps) {
+function BloodParticles({
+	paths,
+	count = 600,
+	clotWorldPosition,
+	clotRadius = 0.25,
+	clotCleared = false,
+}: BloodParticlesProps) {
 	const SCALE_FACTOR = 2.35;
 	const CATHETER_VISUAL_RADIUS = 0.02; // Reduced to allow particles closer to center
 
-	const getRadialBounds = useCallback((pathIndex: number, t: number): { min: number; max: number } => {
-		let inputRadius: number;
-		if (t < 0.5) {
-			inputRadius = 0.22;
-		} else {
-			inputRadius = pathIndex === 0 ? 0.16 : 0.14;
-		}
-		const visualRadius = inputRadius * SCALE_FACTOR * 0.95; // Increased spread
-		return {
-			min: CATHETER_VISUAL_RADIUS,
-			max: visualRadius * 0.98, // Closer to vessel walls
-		};
-	}, []);
+	const getRadialBounds = useCallback(
+		(pathIndex: number, t: number): { min: number; max: number } => {
+			let inputRadius: number;
+			if (t < 0.5) {
+				inputRadius = 0.22;
+			} else {
+				inputRadius = pathIndex === 0 ? 0.16 : 0.14;
+			}
+			const visualRadius = inputRadius * SCALE_FACTOR * 0.95; // Increased spread
+			return {
+				min: CATHETER_VISUAL_RADIUS,
+				max: visualRadius * 0.98, // Closer to vessel walls
+			};
+		},
+		[],
+	);
 
 	// Calculate counts based on proportions
 	const redCount = Math.floor(count * BLOOD_CELL_TYPES.RED_BLOOD_CELL.proportion);
@@ -1021,18 +1077,18 @@ function BloodParticles({ paths, count = 600, clotWorldPosition, clotRadius = 0.
 	const generateParticleData = useCallback((particleCount: number, seedOffset: number) => {
 		return Array.from({ length: particleCount }, (_, i) => {
 			const seed = (i + seedOffset) * 0.618033988749;
-			const seed2 = ((i + seedOffset) * 1.41421356) % 1;
-			const seed3 = ((i + seedOffset) * 2.71828) % 1;
-			const seed4 = ((i + seedOffset) * 3.14159265) % 1;
+			const seed2 = ((i + seedOffset) * Math.SQRT2) % 1;
+			const seed3 = ((i + seedOffset) * Math.E) % 1;
+			const seed4 = ((i + seedOffset) * Math.PI) % 1;
 			const seed5 = ((i + seedOffset) * 1.732) % 1;
 
 			// Use sqrt for more uniform radial distribution (not clustered at center)
-			const radialRaw = ((seed * 5.678) % 1);
+			const radialRaw = (seed * 5.678) % 1;
 			const radialFraction = Math.sqrt(radialRaw); // Uniform disk distribution
 
 			return {
 				pathIndex: i % 2,
-				initialOffset: (seed * 2.718 + seed2 * 0.5) % 1,
+				initialOffset: (seed * Math.E + seed2 * 0.5) % 1,
 				speed: 0.06 + seed2 * 0.04, // Faster flow
 				radialFraction,
 				radialAngle: seed4 * Math.PI * 2,
@@ -1042,9 +1098,18 @@ function BloodParticles({ paths, count = 600, clotWorldPosition, clotRadius = 0.
 		});
 	}, []);
 
-	const redData = useMemo(() => generateParticleData(redCount, 0), [redCount, generateParticleData]);
-	const whiteData = useMemo(() => generateParticleData(whiteCount, 1000), [whiteCount, generateParticleData]);
-	const plateletData = useMemo(() => generateParticleData(plateletCount, 2000), [plateletCount, generateParticleData]);
+	const redData = useMemo(
+		() => generateParticleData(redCount, 0),
+		[redCount, generateParticleData],
+	);
+	const whiteData = useMemo(
+		() => generateParticleData(whiteCount, 1000),
+		[whiteCount, generateParticleData],
+	);
+	const plateletData = useMemo(
+		() => generateParticleData(plateletCount, 2000),
+		[plateletCount, generateParticleData],
+	);
 
 	return (
 		<group>
@@ -1223,7 +1288,7 @@ void main() {
 function DissolveClotMaterial({
 	progress,
 	isAspirating,
-	catheterDirection
+	catheterDirection,
 }: {
 	progress: number;
 	isAspirating: boolean;
@@ -1231,14 +1296,17 @@ function DissolveClotMaterial({
 }) {
 	const materialRef = useRef<THREE.ShaderMaterial>(null);
 
-	const uniforms = useMemo(() => ({
-		uProgress: { value: 0 },
-		uEdgeWidth: { value: 0.15 },
-		uEdgeColor: { value: new THREE.Color("#ff6600") }, // Bright orange edge glow
-		uBaseColor: { value: new THREE.Color("#2a1515") }, // Dark brown/maroon base
-		uTime: { value: 0 },
-		uDissolveDirection: { value: catheterDirection.clone() },
-	}), []);
+	const uniforms = useMemo(
+		() => ({
+			uProgress: { value: 0 },
+			uEdgeWidth: { value: 0.15 },
+			uEdgeColor: { value: new THREE.Color("#ff6600") }, // Bright orange edge glow
+			uBaseColor: { value: new THREE.Color("#2a1515") }, // Dark brown/maroon base
+			uTime: { value: 0 },
+			uDissolveDirection: { value: catheterDirection.clone() },
+		}),
+		[catheterDirection.clone],
+	);
 
 	useFrame((state) => {
 		if (materialRef.current) {
@@ -1270,8 +1338,8 @@ const VESSEL_PATHS = () => [
 	{ path: createMainVesselPath(), radius: 0.22 },
 	{ path: createLeftBranchPath(), radius: 0.16 },
 	{ path: createRightBranchPath(), radius: 0.14 },
-	{ path: createCerebralPath(), radius: 0.10 },
-	{ path: createLeftContinuationPath(), radius: 0.09 }
+	{ path: createCerebralPath(), radius: 0.1 },
+	{ path: createLeftContinuationPath(), radius: 0.09 },
 ];
 
 interface ClotProps {
@@ -1288,7 +1356,7 @@ function AspiratedParticles({
 	catheterTipPosition,
 	catheterDirection,
 	aspirationProgress,
-	isAspirating
+	isAspirating,
 }: {
 	clotPosition: THREE.Vector3;
 	catheterTipPosition: THREE.Vector3;
@@ -1322,18 +1390,18 @@ function AspiratedParticles({
 			const seed4 = ((i + 300) * 0.732) % 1;
 
 			// Spawn time distributed across aspiration
-			const spawnTime = (i / particleCount) * 0.80;
+			const spawnTime = (i / particleCount) * 0.8;
 
 			return {
 				// Start position - facing catheter side of clot
 				theta: (seed * 0.6 + 0.2) * Math.PI * 2, // Mostly facing catheter
 				phi: seed2 * Math.PI * 0.8 + Math.PI * 0.1,
-				surfaceRadius: 0.06 + seed3 * 0.10,
+				surfaceRadius: 0.06 + seed3 * 0.1,
 				// Larger chunks - actual clot fragments
 				size: 0.025 + seed4 * 0.035,
 				spawnTime,
 				// Slower travel - dramatic suction
-				lifetime: 0.20 + seed3 * 0.15,
+				lifetime: 0.2 + seed3 * 0.15,
 				// Tighter spiral into catheter opening
 				spiralSpeed: 6 + seed2 * 6,
 				spiralRadius: 0.03 + seed3 * 0.04,
@@ -1358,21 +1426,23 @@ function AspiratedParticles({
 				const startPos = new THREE.Vector3(
 					clotPosition.x + Math.sin(data.phi) * Math.cos(data.theta) * data.surfaceRadius,
 					clotPosition.y + Math.sin(data.phi) * Math.sin(data.theta) * data.surfaceRadius,
-					clotPosition.z + Math.cos(data.phi) * data.surfaceRadius
+					clotPosition.z + Math.cos(data.phi) * data.surfaceRadius,
 				);
 
 				// Accelerating suction - slow start, fast at catheter
-				const eased = Math.pow(localProgress, 0.3);
+				const eased = localProgress ** 0.3;
 
 				// Target is INSIDE the catheter (past the tip)
-				const targetInsideCatheter = catheterTipPosition.clone()
+				const targetInsideCatheter = catheterTipPosition
+					.clone()
 					.sub(catheterDirection.clone().multiplyScalar(0.15)); // Go into catheter
 
 				const currentPos = startPos.clone().lerp(targetInsideCatheter, eased);
 
 				// Tight spiral that funnels into catheter opening
-				const spiralPhase = time * data.spiralSpeed + data.rotationOffset + localProgress * Math.PI * 4;
-				const funnelFactor = Math.pow(1 - eased, 1.5); // Tightens dramatically
+				const spiralPhase =
+					time * data.spiralSpeed + data.rotationOffset + localProgress * Math.PI * 4;
+				const funnelFactor = (1 - eased) ** 1.5; // Tightens dramatically
 				const currentSpiralRadius = data.spiralRadius * funnelFactor;
 
 				// Spiral perpendicular to catheter direction
@@ -1387,7 +1457,7 @@ function AspiratedParticles({
 					scale *= localProgress / 0.08;
 				} else if (localProgress > 0.75) {
 					// Shrink as entering catheter lumen
-					scale *= Math.pow((1 - localProgress) / 0.25, 0.5);
+					scale *= ((1 - localProgress) / 0.25) ** 0.5;
 				}
 				dummy.scale.setScalar(scale);
 
@@ -1396,7 +1466,7 @@ function AspiratedParticles({
 				dummy.rotation.set(
 					time * rotSpeed + data.rotationOffset,
 					time * rotSpeed * 1.3,
-					time * rotSpeed * 0.7
+					time * rotSpeed * 0.7,
 				);
 			}
 
@@ -1426,7 +1496,7 @@ function AspiratedParticles({
 function SuctionVortex({
 	catheterTipPosition,
 	isAspirating,
-	intensity
+	intensity,
 }: {
 	catheterTipPosition: THREE.Vector3;
 	isAspirating: boolean;
@@ -1454,14 +1524,14 @@ function SuctionVortex({
 	// Create buffer geometry with position attribute - must be before any conditional return
 	const geometry = useMemo(() => {
 		const geo = new THREE.BufferGeometry();
-		geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+		geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 		return geo;
 	}, [positions]);
 
 	useFrame((state) => {
 		if (!vortexRef.current || !isAspirating) return;
 		const posAttr = vortexRef.current.geometry.attributes.position;
-		const time = state.clock.elapsedTime;
+		const _time = state.clock.elapsedTime;
 
 		for (let i = 0; i < particleCount; i++) {
 			let x = positions[i * 3];
@@ -1491,10 +1561,11 @@ function SuctionVortex({
 			positions[i * 3 + 1] = y;
 			positions[i * 3 + 2] = z;
 
-			posAttr.setXYZ(i,
+			posAttr.setXYZ(
+				i,
 				catheterTipPosition.x + x,
 				catheterTipPosition.y + y * 0.5,
-				catheterTipPosition.z + z
+				catheterTipPosition.z + z,
 			);
 		}
 
@@ -1524,31 +1595,27 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 	const { position, tangent } = useMemo(() => {
 		return {
 			position: path.getPoint(tPosition),
-			tangent: path.getTangent(tPosition)
+			tangent: path.getTangent(tPosition),
 		};
 	}, [path, tPosition]);
 
 	// Generate clot geometry
 	const clotGeometry = useMemo(() => {
 		const vesselPaths = VESSEL_PATHS();
-		return generateClotGeometryForVessel(
-			vesselPaths,
-			path,
-			tPosition,
-			vesselRadius,
-			0.5
-		);
+		return generateClotGeometryForVessel(vesselPaths, path, tPosition, vesselRadius, 0.5);
 	}, [path, tPosition, vesselRadius]);
 
 	// Aspiration phases - starts at contact (50%)
-	const contactPhase = progress >= 0.48 && progress < 0.50; // Brief contact moment
-	const aspiratingPhase = progress >= 0.50 && progress < 0.75; // Aspiration starts immediately at contact
+	const contactPhase = progress >= 0.48 && progress < 0.5; // Brief contact moment
+	const aspiratingPhase = progress >= 0.5 && progress < 0.75; // Aspiration starts immediately at contact
 	const isComplete = progress >= 0.75;
 
 	// Dissolve progress for shader (0 to 1 during aspiration phase)
 	const dissolveProgress = aspiratingPhase
-		? Math.pow((progress - 0.50) / 0.25, 0.6) // Faster start for dramatic effect
-		: isComplete ? 1 : 0;
+		? ((progress - 0.5) / 0.25) ** 0.6 // Faster start for dramatic effect
+		: isComplete
+			? 1
+			: 0;
 
 	useFrame((state) => {
 		if (!mainRef.current) return;
@@ -1581,7 +1648,9 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 					<DissolveClotMaterial
 						progress={dissolveProgress}
 						isAspirating={aspiratingPhase || isComplete}
-						catheterDirection={new THREE.Vector3().subVectors(catheterTipPosition, position).normalize()}
+						catheterDirection={new THREE.Vector3()
+							.subVectors(catheterTipPosition, position)
+							.normalize()}
 					/>
 				</mesh>
 			</group>
@@ -1590,7 +1659,9 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 			<AspiratedParticles
 				clotPosition={position}
 				catheterTipPosition={catheterTipPosition}
-				catheterDirection={new THREE.Vector3().subVectors(position, catheterTipPosition).normalize()}
+				catheterDirection={new THREE.Vector3()
+					.subVectors(position, catheterTipPosition)
+					.normalize()}
 				aspirationProgress={dissolveProgress}
 				isAspirating={aspiratingPhase}
 			/>
@@ -1640,7 +1711,13 @@ function Clot({ path, tPosition, vesselRadius, progress, catheterTipPosition }: 
 // CAMERA CONTROLLER
 // ============================================
 
-function CameraController({ progress, catheterPath }: { progress: number; catheterPath: THREE.CatmullRomCurve3 }) {
+function CameraController({
+	progress,
+	catheterPath,
+}: {
+	progress: number;
+	catheterPath: THREE.CatmullRomCurve3;
+}) {
 	const { camera } = useThree();
 
 	useFrame(() => {
@@ -1651,10 +1728,10 @@ function CameraController({ progress, catheterPath }: { progress: number; cathet
 		// Start with wide establishing shot, zoom in progressively
 		// At progress=0: far away, seeing whole artery
 		// At progress=1: close to catheter tip
-		const zoomProgress = Math.pow(progress, 0.7); // Ease the zoom
+		const zoomProgress = progress ** 0.7; // Ease the zoom
 
 		// Distance interpolation: start at 12, end at 2.5
-		const distance = 12 - zoomProgress * 9.5;
+		const _distance = 12 - zoomProgress * 9.5;
 
 		// At the beginning, look at center of vessel network
 		// At the end, follow the catheter closely
@@ -1668,7 +1745,7 @@ function CameraController({ progress, catheterPath }: { progress: number; cathet
 		const endOffset = new THREE.Vector3(
 			-tangent.x * 1.2 + 1,
 			-tangent.y * 1.2 + 1.5,
-			-tangent.z * 1.2 + 2.5
+			-tangent.z * 1.2 + 2.5,
 		);
 		const endPos = catheterPos.clone().add(endOffset);
 
@@ -1710,7 +1787,10 @@ function Scene({ progress }: { progress: number }) {
 	// Continuous blood flow paths (main → branches)
 	const bloodFlowLeftPath = useMemo(() => createBloodFlowLeftPath(), []);
 	const bloodFlowRightPath = useMemo(() => createBloodFlowRightPath(), []);
-	const bloodFlowPaths = useMemo(() => [bloodFlowLeftPath, bloodFlowRightPath], [bloodFlowLeftPath, bloodFlowRightPath]);
+	const bloodFlowPaths = useMemo(
+		() => [bloodFlowLeftPath, bloodFlowRightPath],
+		[bloodFlowLeftPath, bloodFlowRightPath],
+	);
 
 	// Clot parameters - position along LEFT BRANCH (not bloodFlowLeftPath)
 	// Use leftBranchPath directly for more predictable positioning
@@ -1721,7 +1801,7 @@ function Scene({ progress }: { progress: number }) {
 	// Get clot's 3D world position for collision detection
 	const clotWorldPosition = useMemo(() => {
 		return leftBranchPath.getPoint(clotTPosition);
-	}, [leftBranchPath, clotTPosition]);
+	}, [leftBranchPath]);
 
 	// Is clot cleared? (catheter reached it)
 	const clotCleared = progress >= 0.75;
@@ -1758,7 +1838,7 @@ function Scene({ progress }: { progress: number }) {
 			<Catheter
 				path={catheterPath}
 				progress={progress}
-				isDeploying={progress >= 0.40 && progress < 0.48}
+				isDeploying={progress >= 0.4 && progress < 0.48}
 				isAspirating={progress >= 0.48 && progress < 0.75}
 			/>
 
@@ -1800,10 +1880,9 @@ export function VascularScene3D() {
 	useEffect(() => {
 		const container = containerRef.current;
 		if (!container) return;
-		const observer = new IntersectionObserver(
-			([entry]) => setIsVisible(entry.isIntersecting),
-			{ threshold: 0.1 }
-		);
+		const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting), {
+			threshold: 0.1,
+		});
 		observer.observe(container);
 		return () => observer.disconnect();
 	}, []);
@@ -1828,7 +1907,10 @@ export function VascularScene3D() {
 		let ticking = false;
 		const handler = () => {
 			if (!ticking) {
-				requestAnimationFrame(() => { handleScroll(); ticking = false; });
+				requestAnimationFrame(() => {
+					handleScroll();
+					ticking = false;
+				});
 				ticking = true;
 			}
 		};
@@ -1860,7 +1942,12 @@ export function VascularScene3D() {
 				<div className="absolute inset-0 flex">
 					{/* 3D Canvas */}
 					<div className="relative w-1/2 h-full">
-						<Canvas shadows dpr={[1, 2]} gl={{ antialias: true, alpha: true }} style={{ background: "transparent" }}>
+						<Canvas
+							shadows
+							dpr={[1, 2]}
+							gl={{ antialias: true, alpha: true }}
+							style={{ background: "transparent" }}
+						>
 							<PerspectiveCamera makeDefault position={[4, 4, 10]} fov={50} near={0.1} far={100} />
 							<Suspense fallback={<Loader />}>
 								<Scene progress={progress} />
@@ -1880,13 +1967,19 @@ export function VascularScene3D() {
 										key={panel.key}
 										className={cn(
 											"relative mb-6 p-6 rounded-2xl border transition-all duration-500",
-											isActive ? "bg-bg-card border-border-hover scale-100 opacity-100"
-												: isPast ? "bg-bg-elevated/50 border-border scale-95 opacity-40"
-												: "bg-transparent border-transparent scale-95 opacity-20"
+											isActive
+												? "bg-bg-card border-border-hover scale-100 opacity-100"
+												: isPast
+													? "bg-bg-elevated/50 border-border scale-95 opacity-40"
+													: "bg-transparent border-transparent scale-95 opacity-20",
 										)}
 									>
-										<h3 className="font-display text-xl font-bold text-text">{t(`panels.${panel.key}.title`)}</h3>
-										<p className="mt-2 text-sm text-text-muted leading-relaxed">{t(`panels.${panel.key}.description`)}</p>
+										<h3 className="font-display text-xl font-bold text-text">
+											{t(`panels.${panel.key}.title`)}
+										</h3>
+										<p className="mt-2 text-sm text-text-muted leading-relaxed">
+											{t(`panels.${panel.key}.description`)}
+										</p>
 										{isActive && (
 											<div className="inline-flex items-center gap-2 mt-4 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/30 text-xs font-medium text-primary">
 												<span className="live-dot" />
@@ -1903,16 +1996,31 @@ export function VascularScene3D() {
 				{/* Progress */}
 				<div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-4">
 					<div className="w-32 h-1 rounded-full bg-border overflow-hidden">
-						<div className="h-full bg-primary rounded-full transition-all" style={{ width: `${displayProgress * 100}%` }} />
+						<div
+							className="h-full bg-primary rounded-full transition-all"
+							style={{ width: `${displayProgress * 100}%` }}
+						/>
 					</div>
-					<span className="text-xs text-text-muted font-mono">{Math.round(displayProgress * 100)}%</span>
+					<span className="text-xs text-text-muted font-mono">
+						{Math.round(displayProgress * 100)}%
+					</span>
 				</div>
 
 				{displayProgress < 0.05 && (
 					<div className="absolute bottom-20 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
 						<span className="text-xs text-text-subtle">{t("scrollHint")}</span>
-						<svg className="h-5 w-5 text-text-subtle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+						<svg
+							className="h-5 w-5 text-text-subtle"
+							fill="none"
+							stroke="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path
+								strokeLinecap="round"
+								strokeLinejoin="round"
+								strokeWidth={2}
+								d="M19 14l-7 7m0 0l-7-7m7 7V3"
+							/>
 						</svg>
 					</div>
 				)}

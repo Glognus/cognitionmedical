@@ -23,7 +23,7 @@ export function ThemeToggle() {
 			className={cn(
 				"group relative flex h-9 w-9 items-center justify-center rounded-xl",
 				"border border-border bg-bg-card/80 transition-all duration-300",
-				"hover:border-primary/40 hover:bg-bg-hover"
+				"hover:border-primary/40 hover:bg-bg-hover",
 			)}
 			aria-label={`Current theme: ${theme}. Click to cycle.`}
 			title={theme === "light" ? "Light" : theme === "dark" ? "Dark" : "System"}
@@ -32,9 +32,7 @@ export function ThemeToggle() {
 			<svg
 				className={cn(
 					"absolute h-4 w-4 transition-all duration-300",
-					theme === "light"
-						? "rotate-0 scale-100 opacity-100"
-						: "rotate-90 scale-0 opacity-0"
+					theme === "light" ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0",
 				)}
 				fill="none"
 				stroke="currentColor"
@@ -53,9 +51,7 @@ export function ThemeToggle() {
 			<svg
 				className={cn(
 					"absolute h-4 w-4 transition-all duration-300",
-					theme === "dark"
-						? "rotate-0 scale-100 opacity-100"
-						: "-rotate-90 scale-0 opacity-0"
+					theme === "dark" ? "rotate-0 scale-100 opacity-100" : "-rotate-90 scale-0 opacity-0",
 				)}
 				fill="none"
 				stroke="currentColor"
@@ -74,9 +70,7 @@ export function ThemeToggle() {
 			<svg
 				className={cn(
 					"absolute h-4 w-4 transition-all duration-300",
-					theme === "system"
-						? "rotate-0 scale-100 opacity-100"
-						: "rotate-90 scale-0 opacity-0"
+					theme === "system" ? "rotate-0 scale-100 opacity-100" : "rotate-90 scale-0 opacity-0",
 				)}
 				fill="none"
 				stroke="currentColor"
@@ -95,7 +89,7 @@ export function ThemeToggle() {
 			<div
 				className={cn(
 					"absolute -inset-1 rounded-xl bg-primary/20 opacity-0 blur-lg transition-opacity duration-500",
-					"group-hover:opacity-100"
+					"group-hover:opacity-100",
 				)}
 			/>
 		</button>

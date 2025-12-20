@@ -134,9 +134,7 @@ export function Stats() {
 							{/* Content */}
 							<div className="relative">
 								{/* Icon */}
-								<div
-									className={`icon-box h-10 w-10 ${colorStyles[stat.color].icon} mb-6`}
-								>
+								<div className={`icon-box h-10 w-10 ${colorStyles[stat.color].icon} mb-6`}>
 									{stat.icon}
 								</div>
 
@@ -153,9 +151,7 @@ export function Stats() {
 								</h3>
 
 								{/* Description */}
-								<p className="mt-2 text-sm leading-relaxed text-text-muted">
-									{stat.description}
-								</p>
+								<p className="mt-2 text-sm leading-relaxed text-text-muted">{stat.description}</p>
 							</div>
 						</div>
 					))}

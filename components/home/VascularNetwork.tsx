@@ -1,17 +1,14 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 interface VascularNetworkProps {
 	className?: string;
 	progress?: number; // 0-1 for animation progress
 }
 
-export function VascularNetwork({
-	className,
-	progress = 0,
-}: VascularNetworkProps) {
+export function VascularNetwork({ className, progress = 0 }: VascularNetworkProps) {
 	// Calculate which vessels to highlight based on progress
 	const vesselOpacity = useMemo(() => {
 		return {
@@ -198,13 +195,7 @@ export function VascularNetwork({
 
 			{/* Target blockage area */}
 			<g style={{ transition: "opacity 0.8s ease 0.5s" }} opacity={vesselOpacity.target}>
-				<ellipse
-					cx="60"
-					cy="590"
-					rx="20"
-					ry="15"
-					fill="url(#blockageGradient)"
-				/>
+				<ellipse cx="60" cy="590" rx="20" ry="15" fill="url(#blockageGradient)" />
 				{/* Blockage indicator */}
 				<circle
 					cx="60"

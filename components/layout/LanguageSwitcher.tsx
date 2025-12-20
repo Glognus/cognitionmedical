@@ -24,7 +24,7 @@ export function LanguageSwitcher() {
 			<span
 				className={cn(
 					"transition-colors duration-200",
-					currentLocale === "en" ? "text-primary" : "text-text-subtle"
+					currentLocale === "en" ? "text-primary" : "text-text-subtle",
 				)}
 			>
 				EN
@@ -33,7 +33,7 @@ export function LanguageSwitcher() {
 			<span
 				className={cn(
 					"transition-colors duration-200",
-					currentLocale === "fr" ? "text-primary" : "text-text-subtle"
+					currentLocale === "fr" ? "text-primary" : "text-text-subtle",
 				)}
 			>
 				FR

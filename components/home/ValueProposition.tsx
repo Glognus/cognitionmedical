@@ -103,9 +103,7 @@ export function ValueProposition() {
 					<h2 className="font-display text-2xl font-bold text-text sm:text-3xl lg:text-4xl">
 						{t("title")}
 					</h2>
-					<p className="mt-4 text-base text-text-muted sm:text-lg">
-						{t("subtitle")}
-					</p>
+					<p className="mt-4 text-base text-text-muted sm:text-lg">{t("subtitle")}</p>
 				</div>
 
 				{/* Value Cards */}
@@ -128,9 +126,7 @@ export function ValueProposition() {
 							</div>
 
 							{/* Icon */}
-							<div
-								className={`relative icon-box h-12 w-12 ${colorStyles[item.color].icon}`}
-							>
+							<div className={`relative icon-box h-12 w-12 ${colorStyles[item.color].icon}`}>
 								{item.icon}
 							</div>
 

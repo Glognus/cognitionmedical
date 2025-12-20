@@ -28,13 +28,7 @@ export function CatheterIllustration({
 		>
 			<defs>
 				{/* Catheter body gradient */}
-				<linearGradient
-					id="catheterGradient"
-					x1="0%"
-					y1="0%"
-					x2="100%"
-					y2="0%"
-				>
+				<linearGradient id="catheterGradient" x1="0%" y1="0%" x2="100%" y2="0%">
 					<stop offset="0%" stopColor="var(--color-text-subtle)" />
 					<stop offset="30%" stopColor="var(--color-text-muted)" />
 					<stop offset="50%" stopColor="var(--color-text)" />

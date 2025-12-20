@@ -1,8 +1,8 @@
 import { setRequestLocale } from "next-intl/server";
+import { CTASection } from "@/components/home/CTASection";
 import { Hero } from "@/components/home/Hero";
 import { Stats } from "@/components/home/Stats";
 import { ValueProposition } from "@/components/home/ValueProposition";
-import { CTASection } from "@/components/home/CTASection";
 
 type Props = {
 	params: Promise<{ locale: string }>;

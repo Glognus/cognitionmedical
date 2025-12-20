@@ -10,7 +10,9 @@ export default function NotFound() {
 				</div>
 
 				{/* 404 text */}
-				<span className="font-heading text-8xl font-black text-primary-900/10 sm:text-9xl">404</span>
+				<span className="font-heading text-8xl font-black text-primary-900/10 sm:text-9xl">
+					404
+				</span>
 			</div>
 
 			<h1 className="mt-4 font-heading text-3xl font-bold text-primary-900 sm:text-4xl">

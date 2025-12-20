@@ -1,5 +1,5 @@
-import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { ContactForm } from "@/components/contact/ContactForm";
 
 type Props = {
@@ -51,8 +51,7 @@ export default async function ContactPage({ params }: Props) {
 							<span>{t("hero.tagline")}</span>
 						</div>
 						<h1 className="reveal reveal-delay-1 mt-6 font-display text-4xl font-bold leading-[1.1] text-text sm:text-5xl lg:text-6xl">
-							{t("hero.title")}{" "}
-							<span className="text-gradient">{t("hero.titleHighlight")}</span>
+							{t("hero.title")} <span className="text-gradient">{t("hero.titleHighlight")}</span>
 						</h1>
 						<p className="reveal reveal-delay-2 mt-6 max-w-2xl text-base text-text-muted leading-relaxed sm:text-lg">
 							{t("hero.description")}
@@ -73,9 +72,7 @@ export default async function ContactPage({ params }: Props) {
 								<h2 className="font-display text-lg font-bold text-text sm:text-xl">
 									{t("form.title")}
 								</h2>
-								<p className="mt-1 text-sm text-text-muted">
-									{t("form.subtitle")}
-								</p>
+								<p className="mt-1 text-sm text-text-muted">{t("form.subtitle")}</p>
 							</div>
 							<div className="p-6 sm:p-8">
 								<ContactForm />
@@ -170,25 +167,10 @@ export default async function ContactPage({ params }: Props) {
 											aria-hidden="true"
 										>
 											<circle cx="12" cy="4" r="2" className="fill-primary" />
-											<circle
-												cx="6"
-												cy="12"
-												r="1.5"
-												className="fill-secondary"
-											/>
-											<circle
-												cx="18"
-												cy="12"
-												r="1.5"
-												className="fill-secondary"
-											/>
+											<circle cx="6" cy="12" r="1.5" className="fill-secondary" />
+											<circle cx="18" cy="12" r="1.5" className="fill-secondary" />
 											<circle cx="12" cy="20" r="2" className="fill-accent" />
-											<circle
-												cx="12"
-												cy="12"
-												r="2.5"
-												className="fill-primary/80"
-											/>
+											<circle cx="12" cy="12" r="2.5" className="fill-primary/80" />
 											<path
 												d="M12 6.5v3M12 14.5v3M8 11l1.5 1M14.5 12l1.5-1M8 13l1.5-1M14.5 12l1.5 1"
 												className="stroke-text-subtle"
@@ -198,20 +180,14 @@ export default async function ContactPage({ params }: Props) {
 										</svg>
 									</div>
 									<div>
-										<span className="font-display text-lg font-bold text-text">
-											Cognition
-										</span>
+										<span className="font-display text-lg font-bold text-text">Cognition</span>
 										<span className="ml-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-primary">
 											Medical
 										</span>
 									</div>
 								</div>
-								<p className="relative mt-4 text-sm text-text-muted">
-									Cognition Medical Corp.
-								</p>
-								<p className="relative mt-1 text-sm text-text-subtle">
-									{t("info.tagline")}
-								</p>
+								<p className="relative mt-4 text-sm text-text-muted">Cognition Medical Corp.</p>
+								<p className="relative mt-1 text-sm text-text-subtle">{t("info.tagline")}</p>
 							</div>
 
 							{/* Response Time Card */}
@@ -234,12 +210,8 @@ export default async function ContactPage({ params }: Props) {
 										</svg>
 									</div>
 									<div>
-										<h3 className="font-medium text-text">
-											{t("info.response.title")}
-										</h3>
-										<p className="mt-1 text-sm text-text-muted">
-											{t("info.response.description")}
-										</p>
+										<h3 className="font-medium text-text">{t("info.response.title")}</h3>
+										<p className="mt-1 text-sm text-text-muted">{t("info.response.description")}</p>
 									</div>
 								</div>
 							</div>

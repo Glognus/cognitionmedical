@@ -11,22 +11,22 @@ interface CatheterPathProps {
 // Define the path points that the catheter will follow
 // These correspond to key positions in the vascular network
 const pathPoints = [
-	{ x: 200, y: 0, rotation: 0 },      // Entry
-	{ x: 195, y: 80, rotation: -2 },    // Into aorta
-	{ x: 185, y: 160, rotation: -5 },   // First curve
-	{ x: 175, y: 200, rotation: -15 },  // Branch point
-	{ x: 140, y: 240, rotation: -35 },  // Turning left
-	{ x: 100, y: 280, rotation: -45 },  // Deep into carotid
-	{ x: 75, y: 340, rotation: -30 },   // Navigating
-	{ x: 60, y: 400, rotation: -10 },   // Approaching target
-	{ x: 55, y: 480, rotation: -5 },    // Near target
-	{ x: 58, y: 550, rotation: 0 },     // At target
-	{ x: 60, y: 590, rotation: 0 },     // Treatment zone
+	{ x: 200, y: 0, rotation: 0 }, // Entry
+	{ x: 195, y: 80, rotation: -2 }, // Into aorta
+	{ x: 185, y: 160, rotation: -5 }, // First curve
+	{ x: 175, y: 200, rotation: -15 }, // Branch point
+	{ x: 140, y: 240, rotation: -35 }, // Turning left
+	{ x: 100, y: 280, rotation: -45 }, // Deep into carotid
+	{ x: 75, y: 340, rotation: -30 }, // Navigating
+	{ x: 60, y: 400, rotation: -10 }, // Approaching target
+	{ x: 55, y: 480, rotation: -5 }, // Near target
+	{ x: 58, y: 550, rotation: 0 }, // At target
+	{ x: 60, y: 590, rotation: 0 }, // Treatment zone
 ];
 
 function interpolatePath(
 	points: typeof pathPoints,
-	t: number
+	t: number,
 ): { x: number; y: number; rotation: number } {
 	const clampedT = Math.max(0, Math.min(1, t));
 	const segment = clampedT * (points.length - 1);
@@ -41,7 +41,7 @@ function interpolatePath(
 	const p2 = points[index + 1];
 
 	// Smooth interpolation using ease-out
-	const easedT = 1 - Math.pow(1 - localT, 2);
+	const easedT = 1 - (1 - localT) ** 2;
 
 	return {
 		x: p1.x + (p2.x - p1.x) * easedT,
@@ -117,23 +117,24 @@ export function CatheterPath({ className, progress }: CatheterPathProps) {
 			</defs>
 
 			{/* Motion trail (when moving) */}
-			{isMoving && trailPositions.map((pos, i) => (
-				<g
-					key={`trail-${i}`}
-					transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.rotation})`}
-					opacity={0.15 - i * 0.04}
-				>
-					<line
-						x1="0"
-						y1="0"
-						x2="0"
-						y2="60"
-						stroke="var(--color-primary)"
-						strokeWidth="3"
-						strokeLinecap="round"
-					/>
-				</g>
-			))}
+			{isMoving &&
+				trailPositions.map((pos, i) => (
+					<g
+						key={`trail-${i}`}
+						transform={`translate(${pos.x}, ${pos.y}) rotate(${pos.rotation})`}
+						opacity={0.15 - i * 0.04}
+					>
+						<line
+							x1="0"
+							y1="0"
+							x2="0"
+							y2="60"
+							stroke="var(--color-primary)"
+							strokeWidth="3"
+							strokeLinecap="round"
+						/>
+					</g>
+				))}
 
 			{/* Catheter group */}
 			<g
@@ -166,9 +167,33 @@ export function CatheterPath({ className, progress }: CatheterPathProps) {
 				/>
 
 				{/* Radiopaque markers */}
-				<rect x="-3" y="20" width="6" height="3" rx="1" fill="var(--color-secondary)" opacity="0.8" />
-				<rect x="-3" y="35" width="6" height="3" rx="1" fill="var(--color-secondary)" opacity="0.8" />
-				<rect x="-3" y="50" width="6" height="3" rx="1" fill="var(--color-secondary)" opacity="0.8" />
+				<rect
+					x="-3"
+					y="20"
+					width="6"
+					height="3"
+					rx="1"
+					fill="var(--color-secondary)"
+					opacity="0.8"
+				/>
+				<rect
+					x="-3"
+					y="35"
+					width="6"
+					height="3"
+					rx="1"
+					fill="var(--color-secondary)"
+					opacity="0.8"
+				/>
+				<rect
+					x="-3"
+					y="50"
+					width="6"
+					height="3"
+					rx="1"
+					fill="var(--color-secondary)"
+					opacity="0.8"
+				/>
 
 				{/* Catheter tip */}
 				<path
@@ -180,12 +205,7 @@ export function CatheterPath({ className, progress }: CatheterPathProps) {
 				/>
 
 				{/* Tip highlight */}
-				<circle
-					cx="0"
-					cy="-13"
-					r="2.5"
-					fill="var(--color-primary)"
-				/>
+				<circle cx="0" cy="-13" r="2.5" fill="var(--color-primary)" />
 
 				{/* Active tip glow */}
 				{(isMoving || atTarget) && (
@@ -224,12 +244,7 @@ export function CatheterPath({ className, progress }: CatheterPathProps) {
 					/>
 
 					{/* Success center glow */}
-					<circle
-						r="6"
-						fill="var(--color-primary)"
-						opacity="0.6"
-						filter="url(#successPulse)"
-					/>
+					<circle r="6" fill="var(--color-primary)" opacity="0.6" filter="url(#successPulse)" />
 				</g>
 			)}
 		</svg>

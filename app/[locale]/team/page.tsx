@@ -1,6 +1,6 @@
-import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Image from "next/image";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 type Props = {
 	params: Promise<{ locale: string }>;
@@ -160,8 +160,7 @@ export default async function TeamPage({ params }: Props) {
 							<span>{t("hero.tagline")}</span>
 						</div>
 						<h1 className="reveal reveal-delay-1 mt-4 font-display text-3xl font-bold leading-[1.15] text-text sm:text-4xl lg:text-5xl">
-							{t("hero.title")}{" "}
-							<span className="text-gradient">{t("hero.titleHighlight")}</span>
+							{t("hero.title")} <span className="text-gradient">{t("hero.titleHighlight")}</span>
 						</h1>
 						<p className="reveal reveal-delay-2 mx-auto mt-4 max-w-2xl text-sm text-text-muted leading-relaxed sm:text-base">
 							{t("hero.description")}

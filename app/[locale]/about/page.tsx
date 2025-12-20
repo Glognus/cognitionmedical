@@ -1,6 +1,6 @@
-import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 type Props = {
 	params: Promise<{ locale: string }>;
@@ -148,8 +148,7 @@ export default async function AboutPage({ params }: Props) {
 							<span>{t("hero.tagline")}</span>
 						</div>
 						<h1 className="reveal reveal-delay-1 mt-6 font-display text-4xl font-bold leading-[1.1] text-text sm:text-5xl lg:text-6xl">
-							{t("hero.title")}{" "}
-							<span className="text-gradient">{t("hero.titleHighlight")}</span>
+							{t("hero.title")} <span className="text-gradient">{t("hero.titleHighlight")}</span>
 						</h1>
 						<p className="reveal reveal-delay-2 mt-6 max-w-2xl text-base text-text-muted leading-relaxed sm:text-lg">
 							{t("hero.description")}
@@ -184,9 +183,7 @@ export default async function AboutPage({ params }: Props) {
 										d="M13 10V3L4 14h7v7l9-11h-7z"
 									/>
 								</svg>
-								<span className="text-sm font-medium text-primary">
-									{t("mission.label")}
-								</span>
+								<span className="text-sm font-medium text-primary">{t("mission.label")}</span>
 							</div>
 							<h2 className="mt-6 font-display text-2xl font-bold text-text sm:text-3xl lg:text-4xl text-balance">
 								{t("mission.title")}
@@ -226,9 +223,7 @@ export default async function AboutPage({ params }: Props) {
 										d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
 									/>
 								</svg>
-								<span className="text-sm font-medium text-secondary">
-									{t("vision.label")}
-								</span>
+								<span className="text-sm font-medium text-secondary">{t("vision.label")}</span>
 							</div>
 							<h2 className="mt-6 font-display text-2xl font-bold text-text sm:text-3xl">
 								{t("vision.title")}
@@ -238,10 +233,7 @@ export default async function AboutPage({ params }: Props) {
 							</p>
 
 							<div className="mt-8">
-								<Link
-									href={`/${locale}/team`}
-									className="btn btn-secondary"
-								>
+								<Link href={`/${locale}/team`} className="btn btn-secondary">
 									<span>{t("vision.cta")}</span>
 									<svg
 										className="h-5 w-5"
@@ -272,33 +264,21 @@ export default async function AboutPage({ params }: Props) {
 									<div className="font-display text-3xl font-bold text-primary sm:text-4xl">
 										MIT
 									</div>
-									<div className="mt-2 text-sm text-text-muted">
-										{t("vision.stats.mit")}
-									</div>
+									<div className="mt-2 text-sm text-text-muted">{t("vision.stats.mit")}</div>
 								</div>
 								<div className="text-center">
 									<div className="font-display text-3xl font-bold text-secondary sm:text-4xl">
 										HMS
 									</div>
-									<div className="mt-2 text-sm text-text-muted">
-										{t("vision.stats.harvard")}
-									</div>
+									<div className="mt-2 text-sm text-text-muted">{t("vision.stats.harvard")}</div>
 								</div>
 								<div className="text-center">
-									<div className="font-display text-3xl font-bold text-accent sm:text-4xl">
-										7+
-									</div>
-									<div className="mt-2 text-sm text-text-muted">
-										{t("vision.stats.experts")}
-									</div>
+									<div className="font-display text-3xl font-bold text-accent sm:text-4xl">7+</div>
+									<div className="mt-2 text-sm text-text-muted">{t("vision.stats.experts")}</div>
 								</div>
 								<div className="text-center">
-									<div className="font-display text-3xl font-bold text-text sm:text-4xl">
-										50+
-									</div>
-									<div className="mt-2 text-sm text-text-muted">
-										{t("vision.stats.years")}
-									</div>
+									<div className="font-display text-3xl font-bold text-text sm:text-4xl">50+</div>
+									<div className="mt-2 text-sm text-text-muted">{t("vision.stats.years")}</div>
 								</div>
 							</div>
 						</div>
@@ -315,9 +295,7 @@ export default async function AboutPage({ params }: Props) {
 						<h2 className="font-display text-2xl font-bold text-text sm:text-3xl lg:text-4xl">
 							{t("values.title")}
 						</h2>
-						<p className="mt-4 text-base text-text-muted sm:text-lg">
-							{t("values.subtitle")}
-						</p>
+						<p className="mt-4 text-base text-text-muted sm:text-lg">{t("values.subtitle")}</p>
 					</div>
 
 					<div className="mt-12 grid gap-4 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4 sm:gap-6">
@@ -336,9 +314,7 @@ export default async function AboutPage({ params }: Props) {
 									0{index + 1}
 								</div>
 
-								<div
-									className={`relative icon-box h-12 w-12 ${colorStyles[value.color].icon}`}
-								>
+								<div className={`relative icon-box h-12 w-12 ${colorStyles[value.color].icon}`}>
 									{value.icon}
 								</div>
 								<h3 className="relative mt-4 font-display text-base font-semibold text-text sm:text-lg">
@@ -372,9 +348,7 @@ export default async function AboutPage({ params }: Props) {
 								className="card card-interactive group flex flex-col items-center justify-center p-6 sm:p-8"
 							>
 								<div className="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-secondary/20">
-									<span className="font-display text-xl font-bold text-text">
-										{inst.abbr}
-									</span>
+									<span className="font-display text-xl font-bold text-text">{inst.abbr}</span>
 								</div>
 								<p className="mt-4 text-center text-sm font-medium text-text-muted">
 									{t(`institutions.${inst.key}`)}

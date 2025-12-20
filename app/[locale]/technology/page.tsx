@@ -1,6 +1,6 @@
-import { setRequestLocale, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 type Props = {
 	params: Promise<{ locale: string }>;
@@ -178,8 +178,7 @@ export default async function TechnologyPage({ params }: Props) {
 							<span>{t("hero.tagline")}</span>
 						</div>
 						<h1 className="reveal reveal-delay-1 mt-6 font-display text-4xl font-bold leading-[1.1] text-text sm:text-5xl lg:text-6xl">
-							{t("hero.title")}{" "}
-							<span className="text-gradient">{t("hero.titleHighlight")}</span>
+							{t("hero.title")} <span className="text-gradient">{t("hero.titleHighlight")}</span>
 						</h1>
 						<p className="reveal reveal-delay-2 mt-6 max-w-2xl text-base text-text-muted leading-relaxed sm:text-lg">
 							{t("hero.description")}
@@ -197,9 +196,7 @@ export default async function TechnologyPage({ params }: Props) {
 						<h2 className="font-display text-2xl font-bold text-text sm:text-3xl lg:text-4xl">
 							{t("products.title")}
 						</h2>
-						<p className="mt-4 text-base text-text-muted sm:text-lg">
-							{t("products.subtitle")}
-						</p>
+						<p className="mt-4 text-base text-text-muted sm:text-lg">{t("products.subtitle")}</p>
 					</div>
 
 					<div className="mt-14 grid gap-6 sm:mt-16 lg:grid-cols-2">
@@ -214,9 +211,7 @@ export default async function TechnologyPage({ params }: Props) {
 								/>
 
 								{/* Icon */}
-								<div
-									className={`relative icon-box h-16 w-16 ${colorStyles[product.color].icon}`}
-								>
+								<div className={`relative icon-box h-16 w-16 ${colorStyles[product.color].icon}`}>
 									{product.icon}
 								</div>
 
@@ -231,15 +226,10 @@ export default async function TechnologyPage({ params }: Props) {
 								{/* Feature list */}
 								<ul className="relative mt-6 space-y-3">
 									{[1, 2, 3].map((i) => (
-										<li
-											key={i}
-											className="flex items-center gap-3 text-sm text-text-muted"
-										>
+										<li key={i} className="flex items-center gap-3 text-sm text-text-muted">
 											<span
 												className={`h-1.5 w-1.5 rounded-full ${
-													product.color === "primary"
-														? "bg-primary"
-														: "bg-secondary"
+													product.color === "primary" ? "bg-primary" : "bg-secondary"
 												}`}
 											/>
 											{t(`products.items.${product.key}.feature${i}`)}
@@ -259,9 +249,7 @@ export default async function TechnologyPage({ params }: Props) {
 						<h2 className="font-display text-2xl font-bold text-text sm:text-3xl lg:text-4xl">
 							{t("approach.title")}
 						</h2>
-						<p className="mt-4 text-base text-text-muted sm:text-lg">
-							{t("approach.subtitle")}
-						</p>
+						<p className="mt-4 text-base text-text-muted sm:text-lg">{t("approach.subtitle")}</p>
 					</div>
 
 					<div className="mt-14 grid gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-4">
@@ -278,9 +266,7 @@ export default async function TechnologyPage({ params }: Props) {
 										{index + 1}
 									</div>
 
-									<div className="icon-box icon-box-primary h-12 w-12">
-										{item.icon}
-									</div>
+									<div className="icon-box icon-box-primary h-12 w-12">{item.icon}</div>
 
 									<h3 className="mt-4 font-display text-base font-semibold text-text sm:text-lg">
 										{t(`approach.items.${item.key}.title`)}
@@ -304,9 +290,7 @@ export default async function TechnologyPage({ params }: Props) {
 						<h2 className="font-display text-2xl font-bold text-text sm:text-3xl lg:text-4xl">
 							{t("focus.title")}
 						</h2>
-						<p className="mt-4 text-base text-text-muted sm:text-lg">
-							{t("focus.subtitle")}
-						</p>
+						<p className="mt-4 text-base text-text-muted sm:text-lg">{t("focus.subtitle")}</p>
 					</div>
 
 					<div className="mt-14 grid gap-6 sm:mt-16 lg:grid-cols-2">
@@ -389,10 +373,7 @@ export default async function TechnologyPage({ params }: Props) {
 					</p>
 
 					<div className="mt-10">
-						<Link
-							href={`/${locale}/contact`}
-							className="btn btn-primary btn-lg"
-						>
+						<Link href={`/${locale}/contact`} className="btn btn-primary btn-lg">
 							<span>{t("cta.button")}</span>
 							<svg
 								className="h-5 w-5"

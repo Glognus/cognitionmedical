@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 export function ContactForm() {
@@ -53,19 +53,11 @@ export function ContactForm() {
 				</div>
 
 				{/* Success Message */}
-				<h3 className="font-display text-xl font-bold text-text">
-					{t("success")}
-				</h3>
-				<p className="mt-2 max-w-sm text-sm text-text-muted">
-					{t("successDescription")}
-				</p>
+				<h3 className="font-display text-xl font-bold text-text">{t("success")}</h3>
+				<p className="mt-2 max-w-sm text-sm text-text-muted">{t("successDescription")}</p>
 
 				{/* Reset Button */}
-				<button
-					type="button"
-					onClick={handleReset}
-					className="btn btn-secondary btn-sm mt-6"
-				>
+				<button type="button" onClick={handleReset} className="btn btn-secondary btn-sm mt-6">
 					{t("sendAnother") || "Send another message"}
 				</button>
 			</div>
@@ -166,16 +158,12 @@ export function ContactForm() {
 				disabled={isSubmitting}
 				className={cn(
 					"btn btn-primary btn-lg w-full",
-					isSubmitting && "cursor-not-allowed opacity-70"
+					isSubmitting && "cursor-not-allowed opacity-70",
 				)}
 			>
 				{isSubmitting ? (
 					<>
-						<svg
-							className="h-5 w-5 animate-spin"
-							viewBox="0 0 24 24"
-							aria-hidden="true"
-						>
+						<svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24" aria-hidden="true">
 							<circle
 								className="opacity-25"
 								cx="12"
