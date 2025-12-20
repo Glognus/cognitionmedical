@@ -122,24 +122,10 @@ export function Footer() {
 				</div>
 
 				{/* Bottom Bar */}
-				<div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
+				<div className="mt-12 border-t border-border pt-8 text-center sm:text-left">
 					<p className="text-xs text-text-subtle">
 						&copy; {new Date().getFullYear()} Cognition Medical Corp. {t("rights")}
 					</p>
-					<div className="flex items-center gap-6">
-						<Link
-							href={`/${locale}/privacy`}
-							className="text-xs text-text-subtle transition-colors hover:text-text"
-						>
-							{t("privacy")}
-						</Link>
-						<Link
-							href={`/${locale}/terms`}
-							className="text-xs text-text-subtle transition-colors hover:text-text"
-						>
-							{t("terms")}
-						</Link>
-					</div>
 				</div>
 			</div>
 		</footer>

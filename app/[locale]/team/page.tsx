@@ -177,28 +177,24 @@ export default async function TeamPage({ params }: Props) {
 							members={teamMembers.founders}
 							t={t}
 							color="primary"
-							columns={2}
 						/>
 						<TeamSection
 							title={t("sections.clinicalAdvisors")}
 							members={teamMembers.clinicalAdvisors}
 							t={t}
 							color="secondary"
-							columns={2}
 						/>
 						<TeamSection
 							title={t("sections.advisors")}
 							members={teamMembers.advisors}
 							t={t}
 							color="accent"
-							columns={2}
 						/>
 						<TeamSection
 							title={t("sections.legal")}
 							members={teamMembers.legal}
 							t={t}
 							color="primary"
-							columns={1}
 						/>
 					</div>
 				</div>
