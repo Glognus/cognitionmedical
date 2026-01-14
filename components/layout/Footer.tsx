@@ -3,6 +3,8 @@
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/Logo";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Footer() {
 	const t = useTranslations("Footer");
@@ -120,10 +122,16 @@ export function Footer() {
 				</div>
 
 				{/* Bottom Bar */}
-				<div className="mt-12 border-t border-border pt-8 text-center sm:text-left">
+				<div className="mt-12 flex flex-col items-center justify-between gap-6 border-t border-border pt-8 sm:flex-row">
 					<p className="text-xs text-text-subtle">
 						&copy; {new Date().getFullYear()} Cognition Medical Corp. {t("rights")}
 					</p>
+
+					{/* Theme & Language */}
+					<div className="flex items-center gap-4">
+						<ThemeToggle />
+						<LanguageSwitcher />
+					</div>
 				</div>
 			</div>
 		</footer>

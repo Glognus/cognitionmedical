@@ -1,17 +1,14 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { ThemeToggle } from "./ThemeToggle";
 
 export function Header() {
 	const t = useTranslations("Navigation");
 	const pathname = usePathname();
-	const locale = useLocale();
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -96,16 +93,6 @@ export function Header() {
 
 						{/* Right Side Actions */}
 						<div className="flex items-center gap-3">
-							{/* Theme Toggle - Desktop */}
-							<div className="hidden sm:block">
-								<ThemeToggle />
-							</div>
-
-							{/* Language Switcher - Desktop */}
-							<div className="hidden sm:block">
-								<LanguageSwitcher />
-							</div>
-
 							{/* CTA Button - Desktop */}
 							<Link href="/contact" className="btn btn-primary btn-sm hidden lg:flex">
 								<span>{t("getInTouch")}</span>
@@ -220,7 +207,7 @@ export function Header() {
 
 					{/* Bottom Section */}
 					<div
-						className="space-y-4 border-t border-border pt-6"
+						className="border-t border-border pt-6"
 						style={{
 							transform: isMobileMenuOpen ? "translateY(0)" : "translateY(20px)",
 							opacity: isMobileMenuOpen ? 1 : 0,
@@ -230,23 +217,6 @@ export function Header() {
 							transitionDelay: isMobileMenuOpen ? "300ms" : "0ms",
 						}}
 					>
-						{/* Theme & Language - Mobile */}
-						<div className="flex items-center gap-3 rounded-xl bg-bg-card p-4">
-							<div className="flex flex-1 items-center justify-between">
-								<span className="text-sm text-text-muted">
-									{locale === "en" ? "Theme" : "Theme"}
-								</span>
-								<ThemeToggle />
-							</div>
-							<div className="h-6 w-px bg-border" />
-							<div className="flex flex-1 items-center justify-between">
-								<span className="text-sm text-text-muted">
-									{locale === "en" ? "Language" : "Langue"}
-								</span>
-								<LanguageSwitcher />
-							</div>
-						</div>
-
 						{/* CTA Button - Mobile */}
 						<Link
 							href="/contact"
