@@ -107,7 +107,8 @@ function TeamSection({
 	t: (key: string) => string;
 	color?: "primary" | "secondary" | "accent";
 }) {
-	const gridCols = "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
+	// Center when 2 or fewer members
+	const isCentered = members.length <= 2;
 
 	return (
 		<div className="mt-12 first:mt-0 sm:mt-16">
@@ -120,18 +121,33 @@ function TeamSection({
 				<div className="h-px w-12 bg-gradient-to-l from-transparent to-border sm:w-20" />
 			</div>
 
-			{/* Compact Grid */}
-			<div className={`grid gap-x-5 gap-y-8 sm:gap-x-6 sm:gap-y-10 ${gridCols}`}>
-				{members.map((member) => (
-					<TeamMemberCard
-						key={member.key}
-						memberKey={member.key}
-						image={member.image}
-						t={t}
-						color={color}
-					/>
-				))}
-			</div>
+			{/* Centered flex for small groups, grid for larger */}
+			{isCentered ? (
+				<div className="flex flex-wrap justify-center gap-x-8 gap-y-8 sm:gap-x-12">
+					{members.map((member) => (
+						<div key={member.key} className="w-full max-w-[240px] sm:max-w-[280px]">
+							<TeamMemberCard
+								memberKey={member.key}
+								image={member.image}
+								t={t}
+								color={color}
+							/>
+						</div>
+					))}
+				</div>
+			) : (
+				<div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-10 lg:grid-cols-4">
+					{members.map((member) => (
+						<TeamMemberCard
+							key={member.key}
+							memberKey={member.key}
+							image={member.image}
+							t={t}
+							color={color}
+						/>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
