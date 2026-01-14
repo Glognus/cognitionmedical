@@ -1,27 +1,25 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/Logo";
 
 export function Footer() {
 	const t = useTranslations("Footer");
-	const pathname = usePathname();
-	const locale = pathname.split("/")[1] || "en";
+	const locale = useLocale();
 
 	const navigation = {
 		company: [
-			{ name: t("about"), href: `/${locale}/about` },
-			{ name: t("team"), href: `/${locale}/team` },
-			{ name: t("technology"), href: `/${locale}/technology` },
+			{ name: t("about"), href: "/about" },
+			{ name: t("team"), href: "/team" },
+			{ name: t("technology"), href: "/technology" },
 		],
 		contact: [
 			{
 				name: "info@cognitionmedical.com",
 				href: "mailto:info@cognitionmedical.com",
 			},
-			{ name: "Atlanta, GA", href: `/${locale}/contact` },
+			{ name: "Atlanta, GA", href: "/contact" },
 		],
 	};
 
@@ -35,7 +33,7 @@ export function Footer() {
 					{/* Brand Column */}
 					<div className="lg:col-span-5">
 						<Link
-							href={`/${locale}`}
+							href="/"
 							className="group inline-block"
 							aria-label="Cognition Medical Home"
 						>
@@ -97,7 +95,7 @@ export function Footer() {
 							</h3>
 							<div className="mt-4">
 								<Link
-									href={`/${locale}/contact`}
+									href="/contact"
 									className="btn btn-secondary btn-sm w-full lg:w-auto"
 								>
 									<span>{t("contactTitle")}</span>

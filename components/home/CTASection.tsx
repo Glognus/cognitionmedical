@@ -1,13 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 export function CTASection() {
 	const t = useTranslations("Home.cta");
-	const pathname = usePathname();
-	const locale = pathname.split("/")[1] || "en";
+	const locale = useLocale();
 
 	return (
 		<section className="relative py-24 sm:py-32 overflow-hidden">
@@ -63,7 +61,7 @@ export function CTASection() {
 
 				{/* CTA Button */}
 				<div className="mt-10">
-					<Link href={`/${locale}/contact`} className="btn btn-primary btn-lg">
+					<Link href="/contact" className="btn btn-primary btn-lg">
 						<span>{t("button")}</span>
 						<svg
 							className="h-5 w-5"

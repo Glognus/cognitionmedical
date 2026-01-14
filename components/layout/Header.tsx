@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Logo } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -12,6 +11,7 @@ import { ThemeToggle } from "./ThemeToggle";
 export function Header() {
 	const t = useTranslations("Navigation");
 	const pathname = usePathname();
+	const locale = useLocale();
 	const [isScrolled, setIsScrolled] = useState(false);
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -35,19 +35,17 @@ export function Header() {
 		};
 	}, [isMobileMenuOpen]);
 
-	const locale = pathname.split("/")[1] || "en";
-
 	const navItems = [
-		{ href: `/${locale}`, label: t("home") },
-		{ href: `/${locale}/technology`, label: t("technology") },
-		{ href: `/${locale}/about`, label: t("about") },
-		{ href: `/${locale}/team`, label: t("team") },
-		{ href: `/${locale}/contact`, label: t("contact") },
+		{ href: "/", label: t("home") },
+		{ href: "/technology", label: t("technology") },
+		{ href: "/about", label: t("about") },
+		{ href: "/team", label: t("team") },
+		{ href: "/contact", label: t("contact") },
 	];
 
 	const isActive = (href: string) => {
-		if (href === `/${locale}`) {
-			return pathname === `/${locale}` || pathname === `/${locale}/`;
+		if (href === "/") {
+			return pathname === "/";
 		}
 		return pathname.startsWith(href);
 	};
@@ -64,7 +62,7 @@ export function Header() {
 					<nav className="flex items-center justify-between">
 						{/* Logo */}
 						<Link
-							href={`/${locale}`}
+							href="/"
 							className="group relative"
 							aria-label="Cognition Medical Home"
 						>
@@ -109,7 +107,7 @@ export function Header() {
 							</div>
 
 							{/* CTA Button - Desktop */}
-							<Link href={`/${locale}/contact`} className="btn btn-primary btn-sm hidden lg:flex">
+							<Link href="/contact" className="btn btn-primary btn-sm hidden lg:flex">
 								<span>{t("getInTouch")}</span>
 								<svg
 									className="h-4 w-4"
@@ -251,7 +249,7 @@ export function Header() {
 
 						{/* CTA Button - Mobile */}
 						<Link
-							href={`/${locale}/contact`}
+							href="/contact"
 							onClick={() => setIsMobileMenuOpen(false)}
 							className="btn btn-primary btn-lg w-full"
 						>

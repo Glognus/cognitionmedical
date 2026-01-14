@@ -1,18 +1,17 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 export function LanguageSwitcher() {
 	const pathname = usePathname();
 	const router = useRouter();
-
-	const currentLocale = pathname.split("/")[1] || "en";
+	const currentLocale = useLocale();
 	const otherLocale = currentLocale === "en" ? "fr" : "en";
 
 	const handleSwitch = () => {
-		const newPath = pathname.replace(`/${currentLocale}`, `/${otherLocale}`);
-		router.push(newPath);
+		router.replace(pathname, { locale: otherLocale });
 	};
 
 	return (

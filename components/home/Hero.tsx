@@ -1,10 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@/i18n/navigation";
 
 // Dynamically import 3D scene to avoid SSR issues with Three.js
 const VascularScene3D = dynamic(
@@ -24,8 +23,7 @@ const VascularScene3D = dynamic(
 
 export function Hero() {
 	const t = useTranslations("Home.hero");
-	const pathname = usePathname();
-	const locale = pathname.split("/")[1] || "en";
+	const locale = useLocale();
 	const [shouldLoad3D, setShouldLoad3D] = useState(false);
 	const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -135,7 +133,7 @@ export function Hero() {
 
 							{/* CTA Buttons */}
 							<div className="reveal reveal-delay-3 mt-10 flex flex-wrap items-center justify-center gap-4">
-								<Link href={`/${locale}/technology`} className="btn btn-primary btn-lg">
+								<Link href="/technology" className="btn btn-primary btn-lg">
 									<span>{t("cta")}</span>
 									<svg
 										className="h-5 w-5"
@@ -152,7 +150,7 @@ export function Hero() {
 										/>
 									</svg>
 								</Link>
-								<Link href={`/${locale}/team`} className="btn btn-secondary btn-lg">
+								<Link href="/team" className="btn btn-secondary btn-lg">
 									<span>{t("ctaSecondary")}</span>
 								</Link>
 							</div>
